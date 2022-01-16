@@ -6,23 +6,6 @@ import 'package:flutter/material.dart';
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
 
-  Route moreFeaturedItems() {
-    return PageRouteBuilder(
-        pageBuilder: (context,animation,secondaryAnimation) => const FeaturedPage(),
-        transitionsBuilder: (context, animation,secondaryAnimation,child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          final tween = Tween(begin: begin, end: end);
-          final offsetAnimation = animation.drive(tween);
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        }
-    );
-  }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,7 +30,7 @@ class HomePage extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: (){
-                          Navigator.of(context).push(moreFeaturedItems());
+                          //Navigator.of(context).push();
                         },
                         child: const Text("See more"),
                       )
