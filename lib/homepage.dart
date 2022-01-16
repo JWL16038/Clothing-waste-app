@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
               child: Column(
-                children: [
+                children: [ //dsfs
                   //const SearchBar(),
                   const SizedBox(height: 30),
                   Row(
