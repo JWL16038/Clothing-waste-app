@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1053146009972",
+    "project_id": "clothing-waste-app",
+    "storage_bucket": "clothing-waste-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053146009972:android:89f52b79b9674e1e981c21",
+        "android_client_info": {
+          "package_name": "com.example.clothing_waste_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053146009972-h6g9a071s1ota6a57ceam8l29p7bit3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl6ff8FakoxS4fbWekkiXXR4BgZJn2IDU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053146009972-h6g9a071s1ota6a57ceam8l29p7bit3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

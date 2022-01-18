@@ -1,5 +1,6 @@
+import 'package:clothing_waste_app/messaging/messaging_main.dart';
 import 'package:clothing_waste_app/side_bar.dart';
-import 'package:clothing_waste_app/tab_navigator.dart';
+import 'package:clothing_waste_app/navigation_bar/tab_navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,22 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+
+  Route gotoMessaging() {
+    return PageRouteBuilder(
+        pageBuilder: (context,animation,secondaryAnimation) => const MessagingPage(),
+        transitionsBuilder: (context, animation,secondaryAnimation,child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          final tween = Tween(begin: begin, end: end);
+          final offsetAnimation = animation.drive(tween);
+          return SlideTransition(
+            position: offsetAnimation,
+            child: child,
+          );
+        }
+    );
+  }
 
 
   void _selectTab(String tabItem,int index){
@@ -54,10 +71,10 @@ class _BottomNavBarState extends State<BottomNavBar> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Clothing waste app prototype"),
-          actions: const <Widget> [
+          actions: <Widget> [
             IconButton(
-                icon: Icon(Icons.message_outlined),
-                onPressed: pressed,
+                icon: const Icon(Icons.message_outlined),
+                onPressed: (){Navigator.of(context).push(gotoMessaging());},
              ),
           ]
         ),

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 int numberColumns = 2;
 
-class FeaturedPage extends StatelessWidget {
-  const FeaturedPage({Key? key}) : super(key: key);
+class RecentlyAddedPage extends StatelessWidget {
+  const RecentlyAddedPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

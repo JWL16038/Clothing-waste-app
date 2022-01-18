@@ -1,10 +1,10 @@
-import 'package:clothing_waste_app/buy_page.dart';
-import 'package:clothing_waste_app/profile_page.dart';
-import 'package:clothing_waste_app/sell_page.dart';
-import 'package:clothing_waste_app/swap_page.dart';
+import 'package:clothing_waste_app/homepage/buy_page.dart';
+import 'package:clothing_waste_app/homepage/profile_page.dart';
+import 'package:clothing_waste_app/homepage/sell_page.dart';
+import 'package:clothing_waste_app/homepage/swap_page.dart';
 import 'package:flutter/material.dart';
 
-import 'homepage.dart';
+import '../homepage/homepage.dart';
 
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
