@@ -1,24 +1,11 @@
 import 'package:clothing_waste_app/buypage/place_order.dart';
 import 'package:flutter/material.dart';
 
+import '../animations/slide.dart';
+import '../homepage/buy_page.dart';
+
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);
-
-  Route buyPage() {
-    return PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => const PlaceOrder(),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          final tween = Tween(begin: begin, end: end);
-          final offsetAnimation = animation.drive(tween);
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        });
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +103,15 @@ class ProductDetails extends StatelessWidget {
                     //child: Text("Location: 123 Lorem ipsum street,"),
                     ),
                 OutlinedButton(
-                  onPressed: buyPage,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      SlideRoute(
+                        page: const BuyPage(),
+
+                      ),
+                    );
+                  },
                   child: const Text('Buy this item'),
                 ),
                 OutlinedButton(
