@@ -1,8 +1,8 @@
 import 'package:clothing_waste_app/products/product_card.dart';
 import 'package:flutter/material.dart';
 
-class FeaturedList extends StatelessWidget {
-  const FeaturedList({Key? key}) : super(key: key);
+class ProductsListPreview extends StatelessWidget {
+  const ProductsListPreview({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

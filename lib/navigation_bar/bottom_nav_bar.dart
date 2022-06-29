@@ -4,16 +4,15 @@ import 'package:clothing_waste_app/navigation_bar/tab_navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 int _selectedIndex = 0;
 String _currentPage = "Page1";
-List<String> pageKeys = ["Page1","Page2","Page3","Page4","Page5",];
-final Map<String,GlobalKey<NavigatorState>> _navigatorKeys = {
-  "Page1":GlobalKey<NavigatorState>(),
-  "Page2":GlobalKey<NavigatorState>(),
-  "Page3":GlobalKey<NavigatorState>(),
-  "Page4":GlobalKey<NavigatorState>(),
-  "Page5":GlobalKey<NavigatorState>(),
+List<String> pageKeys = ["Page1", "Page2", "Page3", "Page4", "Page5"];
+final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+  "Page1": GlobalKey<NavigatorState>(),
+  "Page2": GlobalKey<NavigatorState>(),
+  "Page3": GlobalKey<NavigatorState>(),
+  "Page4": GlobalKey<NavigatorState>(),
+  "Page5": GlobalKey<NavigatorState>(),
 };
 
 class BottomNavBar extends StatefulWidget {
@@ -24,59 +23,51 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-
   Route gotoMessaging() {
     return PageRouteBuilder(
-        pageBuilder: (context,animation,secondaryAnimation) => const MessagingPage(),
-        transitionsBuilder: (context, animation,secondaryAnimation,child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          final tween = Tween(begin: begin, end: end);
-          final offsetAnimation = animation.drive(tween);
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        }
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const MessagingPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(0.0, 1.0);
+        const end = Offset.zero;
+        final tween = Tween(begin: begin, end: end);
+        final offsetAnimation = animation.drive(tween);
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
     );
   }
 
-
-  void _selectTab(String tabItem,int index){
-    if(tabItem == _currentPage){
-      _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
-    }
-    else{
-      setState((){
+  void _selectTab(String tabItem, int index) {
+    setState(
+      () {
         _currentPage = pageKeys[index];
         _selectedIndex = index;
-      });
-    }
+      },
+    );
   }
-
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        final isFirstRouteInCurrentTab = !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
-          if(isFirstRouteInCurrentTab){
-            if(_currentPage != "Page1"){
-              _selectTab("Page1",0);
-              return false;
-            }
-        }
+      onWillPop: () async {
+        final isFirstRouteInCurrentTab =
+            !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Clothing waste app prototype"),
-          actions: <Widget> [
+          title: const Text("XXXXXXXXXX"),
+          actions: <Widget>[
             IconButton(
-                icon: const Icon(Icons.message_outlined),
-                onPressed: (){Navigator.of(context).push(gotoMessaging());},
-             ),
-          ]
+              icon: const Icon(Icons.message_outlined),
+              onPressed: () {
+                Navigator.of(context).push(gotoMessaging());
+              },
+            ),
+          ],
         ),
         body: Stack(
           children: <Widget>[
@@ -86,13 +77,14 @@ class _BottomNavBarState extends State<BottomNavBar> {
             _buildOffstageNavigator("Page4"),
             _buildOffstageNavigator("Page5"),
           ],
-
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.shifting,
-          selectedIconTheme: const IconThemeData(color: Colors.deepOrangeAccent,size: 30),
+          selectedIconTheme:
+              const IconThemeData(color: Colors.deepOrangeAccent, size: 30),
           selectedItemColor: Colors.deepOrangeAccent,
-          unselectedIconTheme: const IconThemeData(color: Colors.blueAccent,size: 30),
+          unselectedIconTheme:
+              const IconThemeData(color: Colors.blueAccent, size: 30),
           unselectedItemColor: Colors.blueAccent,
           iconSize: 48.0,
           items: const [
@@ -117,28 +109,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
               label: 'Profile',
             ),
           ],
-          onTap: (int index){
-            _selectTab(pageKeys[index],index);
+          onTap: (int index) {
+            _selectTab(pageKeys[index], index);
           },
           currentIndex: _selectedIndex,
         ),
+        //
         drawer: const SideBar(),
       ),
     );
   }
 }
 
-Widget _buildOffstageNavigator(String tabItem){
+Widget _buildOffstageNavigator(String tabItem) {
   return Offstage(
     offstage: _currentPage != tabItem,
     child: TabNavigator(
       navigatorKey: _navigatorKeys[tabItem],
       tabItem: tabItem,
-    )
+    ),
   );
-}
-
-
-void pressed() {
-
 }

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
-class BuyPage extends StatelessWidget {
-  const BuyPage({Key? key}) : super(key: key);
+class PlaceOrder extends StatelessWidget {
+  const PlaceOrder({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    print('test2');
     return Container(
-      width: 50,
+      width:50,
       child: Column(
-        children: const [
+        children:  const [
           Text('Buy this item'),
         ],
       ),
