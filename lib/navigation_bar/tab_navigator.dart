@@ -1,7 +1,7 @@
 import 'package:clothing_waste_app/homepage/buy_page.dart';
 import 'package:clothing_waste_app/userprofile/profile_page.dart';
-import 'package:clothing_waste_app/homepage/sell_page.dart';
-import 'package:clothing_waste_app/homepage/swap_page.dart';
+import 'package:clothing_waste_app/homepage/shop_page.dart';
+import 'package:clothing_waste_app/homepage/add_page.dart';
 import 'package:flutter/material.dart';
 
 import '../homepage/homepage.dart';
@@ -25,10 +25,10 @@ class TabNavigator extends StatelessWidget {
       child = const BuyPage();
     }
     else if(tabItem == "Page3"){
-      child = const SellPage();
+      child = const ShopPage();
     }
     else if(tabItem == "Page4"){
-      child = const SwapPage();
+      child = const AddPage();
     }
     else if(tabItem == "Page5"){
       child = const ProfilePage();

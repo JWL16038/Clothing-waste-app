@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-import 'navigation_bar/bottom_nav_bar.dart';
+import 'navigation_bar/bottom_nav_bar_iOS.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

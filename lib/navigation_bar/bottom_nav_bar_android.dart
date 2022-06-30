@@ -1,3 +1,4 @@
+import 'package:clothing_waste_app/design/colours.dart';
 import 'package:clothing_waste_app/messaging/messaging_main.dart';
 import 'package:clothing_waste_app/side_bar.dart';
 import 'package:clothing_waste_app/navigation_bar/tab_navigator.dart';
@@ -58,17 +59,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
         return isFirstRouteInCurrentTab;
       },
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("XXXXXXXXXX"),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.message_outlined),
-              onPressed: () {
-                Navigator.of(context).push(gotoMessaging());
-              },
-            ),
-          ],
-        ),
+        // appBar: AppBar(
+        //   title: const Text("Title bar"),
+        //   actions: <Widget>[
+        //     IconButton(
+        //       icon: const Icon(Icons.message_outlined),
+        //       onPressed: () {
+        //         Navigator.of(context).push(gotoMessaging());
+        //       },
+        //     ),
+        //   ],
+        // ),
         body: Stack(
           children: <Widget>[
             _buildOffstageNavigator("Page1"),
@@ -81,31 +82,41 @@ class _BottomNavBarState extends State<BottomNavBar> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.shifting,
           selectedIconTheme:
-              const IconThemeData(color: Colors.deepOrangeAccent, size: 30),
-          selectedItemColor: Colors.deepOrangeAccent,
+              const IconThemeData(color: primaryColor, size: 30),
+          selectedItemColor: primaryColor,
           unselectedIconTheme:
-              const IconThemeData(color: Colors.blueAccent, size: 30),
-          unselectedItemColor: Colors.blueAccent,
+              const IconThemeData(color: secondaryColor, size: 30),
+          unselectedItemColor: secondaryColor,
           iconSize: 48.0,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.featured_play_list_outlined),
+              icon: Icon(
+                Icons.featured_play_list_outlined,
+              ),
               label: 'Featured Items',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.looks_two_outlined),
-              label: 'Buy',
+              icon: Icon(
+                Icons.shop_2_outlined,
+              ),
+              label: 'Shop items',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.looks_3_outlined),
-              label: 'Sell',
+              icon: Icon(
+                Icons.add_circle_outline,
+              ),
+              label: 'Add item',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.swap_vert),
-              label: 'Swap',
+              icon: Icon(
+                Icons.search_outlined,
+              ),
+              label: 'Search',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle_outlined),
+              icon: Icon(
+                Icons.account_circle_outlined,
+              ),
               label: 'Profile',
             ),
           ],
@@ -115,7 +126,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           currentIndex: _selectedIndex,
         ),
         //
-        drawer: const SideBar(),
+        //drawer: const SideBar(),
       ),
     );
   }
