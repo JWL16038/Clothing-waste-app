@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1053146009972",
+    "firebase_url": "https://clothing-waste-app-default-rtdb.firebaseio.com",
     "project_id": "clothing-waste-app",
     "storage_bucket": "clothing-waste-app.appspot.com"
   },
@@ -29,6 +30,13 @@
             {
               "client_id": "1053146009972-h6g9a071s1ota6a57ceam8l29p7bit3j.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1053146009972-83kc9640ih96ap67urk2hjh6md6jqk07.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.clothingWasteApp"
+              }
             }
           ]
         }

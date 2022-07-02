@@ -1,44 +1,62 @@
+import 'dart:io' show Platform;
+
+import 'package:clothing_waste_app/authentication/login_page.dart';
+import 'package:clothing_waste_app/providers/user_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import 'navigation_bar/bottom_nav_bar_iOS.dart';
+import 'ui/bottom_nav_bar_iOS.dart' as navbar_ios;
+import 'ui/bottom_nav_bar_android.dart' as navbar_android;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(MyApp());
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key);
-  final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
-
+  const MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Clothing waste app prototype',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Clothing waste app prototype',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.userChanges(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.active){
+              if (snapshot.hasError) {
+                return Text('Something went wrong: ${snapshot.error}');
+              } else if (snapshot.hasData) {
+                if (Platform.isAndroid) {
+                  return const navbar_android.BottomNavBar();
+                } else if (Platform.isIOS) {
+                  return const navbar_ios.BottomNavBar();
+                }
+              }
+            }
+            else if(snapshot.connectionState == ConnectionState.waiting){
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+            return const LoginPage();
+          },
+        ),
       ),
-      home: FutureBuilder(
-        future:_fbApp,
-        builder: (context,snapshot){
-          if(snapshot.hasError){
-            print(snapshot.error.toString());
-            return const Text('Something went wrong!');
-          }
-          else if(snapshot.hasData){
-            return const BottomNavBar();
-          }
-          else{
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        }
-      )
     );
   }
 }

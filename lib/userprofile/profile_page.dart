@@ -1,9 +1,30 @@
+
 import 'package:clothing_waste_app/userprofile/profile_items.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  String username;
+  String photoURL;
+
+  void getUserName() async{
+    DocumentSnapshot snap = await FirebaseFirestore.instance.collection('users').doc(
+        FirebaseAuth.instance.currentUser!.uid).get();
+
+    setState((){
+      username = (snap.data() as Map<String,dynamic>)['username'];
+      photoURL = (snap.data() as Map<String,dynamic>)['photoUrl'];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +38,8 @@ class ProfilePage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Image(
-                image: NetworkImage(
-                    "https://thumbs.dreamstime.com/b/default-avatar-profile-flat-icon-social-media-user-vector-portrait-unknown-human-image-default-avatar-profile-flat-icon-184330869.jpg"),
+              Image(
+                image: NetworkImage(photoURL),
                 width: 100,
                 height: 100,
                 alignment: Alignment.topCenter,
@@ -28,17 +48,15 @@ class ProfilePage extends StatelessWidget {
                 width: 30,
               ),
               Column(
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      "Username",
-                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(username),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text(
                       "xxx items for sale",
@@ -57,7 +75,7 @@ class ProfilePage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
-                  "xxx followers",
+                  " followers",
                 ),
               ),
               SizedBox(

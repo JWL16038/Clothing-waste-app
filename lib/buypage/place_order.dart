@@ -5,7 +5,6 @@ class PlaceOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('test2');
     return Container(
       width:50,
       child: Column(

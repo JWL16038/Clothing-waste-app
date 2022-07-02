@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class SlideRoute extends PageRouteBuilder {
+class SwipeLeftRoute extends PageRouteBuilder {
   final Widget page;
 
-  SlideRoute({required this.page})
+  SwipeLeftRoute({required this.page})
       : super(
           pageBuilder: (BuildContext context, Animation<double> animation,
                   Animation<double> secAnimation) =>
@@ -23,3 +23,5 @@ class SlideRoute extends PageRouteBuilder {
           ),
         );
 }
+
+

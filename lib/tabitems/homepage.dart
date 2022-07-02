@@ -43,7 +43,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        SlideRoute(
+                        SwipeLeftRoute(
                           page: const ProductsPage(
                             products: [],
                           ),
@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        SlideRoute(
+                        SwipeLeftRoute(
                           page: const ProductsPage(
                             products: [],
                           ),
@@ -123,7 +123,7 @@ class HomePage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        SlideRoute(
+                        SwipeLeftRoute(
                           page: const ProductsPage(
                             products: [],
                           ),

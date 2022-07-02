@@ -14,7 +14,7 @@ class ProductCard extends StatelessWidget {
         onTap: () {
           Navigator.pushReplacement(
             context,
-            SlideRoute(page: const ProductDetails()),
+            SwipeLeftRoute(page: const ProductDetails()),
           );
         },
         child: Card(
