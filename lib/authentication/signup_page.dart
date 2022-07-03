@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:clothing_waste_app/authentication/login_page.dart';
+import 'package:clothing_waste_app/ui/responsive_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_svg/svg.dart';
@@ -106,7 +107,7 @@ class _SignupPageState extends State<SignupPage> {
     if (res == "Success") {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const BottomNavBar(),
+          builder: (context) => const ResponsiveLayout(),
         ),
       );
     } else {
@@ -138,7 +139,7 @@ class _SignupPageState extends State<SignupPage> {
                           radius: 64,
                           backgroundImage: MemoryImage(_image!),
                         )
-                      : CircleAvatar(
+                      : const CircleAvatar(
                           radius: 64,
                           backgroundImage: NetworkImage(unknownProfile),
                         ),

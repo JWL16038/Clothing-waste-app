@@ -1,10 +1,10 @@
 import 'package:clothing_waste_app/userprofile/profile_page.dart';
-import 'package:clothing_waste_app/tabitems/shop_page.dart';
-import 'package:clothing_waste_app/tabitems/add_page.dart';
+import 'package:clothing_waste_app/homepage/shop_page.dart';
+import 'package:clothing_waste_app/items/add_page.dart';
 import 'package:flutter/material.dart';
 
-import '../tabitems/homepage.dart';
-import '../tabitems/search_page.dart';
+import '../homepage/homepage.dart';
+import '../homepage/search_page.dart';
 
 class TabNavigator extends StatelessWidget {
   final GlobalKey<NavigatorState>? navigatorKey;
@@ -15,8 +15,11 @@ class TabNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = const HomePage();
+    Widget child;
     switch (tabItem) {
+      case "homepage":
+        child = const HomePage();
+        break;
       case "shop":
         child = const ShopPage();
         break;
@@ -31,7 +34,7 @@ class TabNavigator extends StatelessWidget {
         break;
       default:
         child = const HomePage();
-        break;
+        break;//dead code
     }
     return Navigator(
       key: navigatorKey,

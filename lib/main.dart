@@ -2,13 +2,12 @@ import 'dart:io' show Platform;
 
 import 'package:clothing_waste_app/authentication/login_page.dart';
 import 'package:clothing_waste_app/providers/user_provider.dart';
+import 'package:clothing_waste_app/ui/responsive_layout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'ui/bottom_nav_bar_iOS.dart' as navbar_ios;
-import 'ui/bottom_nav_bar_android.dart' as navbar_android;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -41,11 +40,7 @@ class MyApp extends StatelessWidget {
               if (snapshot.hasError) {
                 return Text('Something went wrong: ${snapshot.error}');
               } else if (snapshot.hasData) {
-                if (Platform.isAndroid) {
-                  return const navbar_android.BottomNavBar();
-                } else if (Platform.isIOS) {
-                  return const navbar_ios.BottomNavBar();
-                }
+                return const ResponsiveLayout();
               }
             }
             else if(snapshot.connectionState == ConnectionState.waiting){

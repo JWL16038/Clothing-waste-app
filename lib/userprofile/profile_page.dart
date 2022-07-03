@@ -1,4 +1,3 @@
-
 import 'package:clothing_waste_app/userprofile/profile_items.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,17 +12,33 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String username;
-  String photoURL;
+  String username = "";
+  String photoURL = "";
+  int watchers = 0;
+  int itemsForSale = 0;
 
-  void getUserName() async{
-    DocumentSnapshot snap = await FirebaseFirestore.instance.collection('users').doc(
-        FirebaseAuth.instance.currentUser!.uid).get();
+  void getUserdata() async {
+    DocumentSnapshot snap = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
 
-    setState((){
-      username = (snap.data() as Map<String,dynamic>)['username'];
-      photoURL = (snap.data() as Map<String,dynamic>)['photoUrl'];
+    List watchersList = (snap.data() as Map<String, dynamic>)['watchers'];
+    List feedbackList = (snap.data() as Map<String, dynamic>)['feedback'];
+    List itemsList = (snap.data() as Map<String, dynamic>)['items'];
+
+    setState(() {
+      username = (snap.data() as Map<String, dynamic>)['username'];
+      photoURL = (snap.data() as Map<String, dynamic>)['photoUrl'];
+      watchers = watchersList.length;
+      itemsForSale = itemsList.length;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserdata();
   }
 
   @override
@@ -38,11 +53,9 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image(
-                image: NetworkImage(photoURL),
-                width: 100,
-                height: 100,
-                alignment: Alignment.topCenter,
+              CircleAvatar(
+                radius: 64,
+                backgroundImage: NetworkImage(photoURL),
               ),
               const SizedBox(
                 width: 30,
@@ -51,15 +64,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(username),
+                    child: Text('Username:  $username'),
                   ),
                   const SizedBox(
                     height: 20,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "xxx items for sale",
+                      '$itemsForSale items for sale',
                     ),
                   ),
                 ],
@@ -71,17 +84,17 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
+            children: [
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  " followers",
+                  "$watchers watchers",
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 40,
               ),
-              Padding(
+              const Padding(
                 padding: EdgeInsets.all(8.0),
                 child: Text(
                   "xxx% reputation",
@@ -89,20 +102,24 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ],
           ),
-          const SizedBox(
+          SizedBox(
             height: 60,
-            child: Center(
-              child: Text(
-                'Your items for sale',
-                textAlign: TextAlign.center,
-              ),
-            ),
+            child: itemsForSale == 0
+                ? const Center(
+                    child: Text('No items found.'),
+                  )
+                : const Center(
+                    child: Text(
+                      'Your items for sale: ',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
           ),
           Flexible(
             fit: FlexFit.loose,
             child: GridView.builder(
               scrollDirection: Axis.vertical,
-              itemCount: 30,
+              itemCount: itemsForSale == 0 ? 0 : itemsForSale,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 10,

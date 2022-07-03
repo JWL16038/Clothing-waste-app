@@ -2,7 +2,7 @@ import 'package:clothing_waste_app/buypage/place_order.dart';
 import 'package:flutter/material.dart';
 
 import '../animations/slide.dart';
-import '../tabitems/buy_page.dart';
+import '../homepage/buy_page.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({Key? key}) : super(key: key);

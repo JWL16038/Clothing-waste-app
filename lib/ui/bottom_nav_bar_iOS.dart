@@ -1,13 +1,12 @@
 import 'package:clothing_waste_app/design/colours.dart';
-import 'package:clothing_waste_app/ui/side_bar.dart';
 import 'package:clothing_waste_app/ui/tab_navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../tabitems/homepage.dart';
-import '../tabitems/search_page.dart';
-import '../tabitems/shop_page.dart';
-import '../tabitems/add_page.dart';
+import '../homepage/homepage.dart';
+import '../homepage/search_page.dart';
+import '../homepage/shop_page.dart';
+import '../items/add_page.dart';
 import '../userprofile/profile_page.dart';
 
 int _selectedIndex = 0;
