@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../authentication/signout.dart';
+
 class SideBar extends StatelessWidget {
   const SideBar({Key? key}) : super(key: key);
 
@@ -17,8 +19,8 @@ class SideBar extends StatelessWidget {
             child: Text("Sidebar header"),
           ),
           MaterialButton(
-            onPressed: (){ Navigator.pop(context);},
-            child: const Text("Button 1"),
+            onPressed: () => signOut(),
+            child: const Text("Sign out"),
           ),
         ],
       )

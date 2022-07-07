@@ -7,10 +7,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: TextButton(
-        onPressed: () => signOut(),
-        child: const Text("Sign out"),
-      ),
+
     );
   }
 }

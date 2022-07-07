@@ -2,8 +2,12 @@ import 'package:clothing_waste_app/animations/slide.dart';
 import 'package:clothing_waste_app/products/product_details.dart';
 import 'package:flutter/material.dart';
 
+import '../database/item_model.dart';
+
 class ProductCard extends StatelessWidget {
-  const ProductCard({Key? key}) : super(key: key);
+  final Item item;
+
+  const ProductCard({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,34 +26,51 @@ class ProductCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Image(
-                image: NetworkImage(
-                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
+                  child: Text('"${item.caption}"'),
+                ),
+              ),
+              Image(
+                image: NetworkImage(item.photoUrl),
                 width: 100,
                 height: 100,
               ),
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: const Text("Item name: xxx"),
+                  child: Text('Item name: ${item.itemName}'),
                 ),
               ),
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: const Text("Price: xxx"),
+                  child: Text('Description: ${item.itemDesc}'),
                 ),
               ),
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: const Text("Size: xxx"),
+                  child: Text('Price: ${item.price}'),
                 ),
               ),
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: const Text("Condition: xxx"),
+                  child: Text('Colour: ${item.colour}'),
+                ),
+              ),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
+                  child: Text('Size: ${item.size}'),
+                ),
+              ),
+              Center(
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
+                  child: Text('Condition: ${item.condition}'),
                 ),
               ),
             ],

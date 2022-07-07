@@ -1,8 +1,11 @@
-import 'package:clothing_waste_app/userprofile/profile_items.dart';
+import 'package:clothing_waste_app/products/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../items/user_items.dart';
+import '../products/products_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -16,20 +19,22 @@ class _ProfilePageState extends State<ProfilePage> {
   String photoURL = "";
   int watchers = 0;
   int itemsForSale = 0;
+  List<ProductCard> itemsList = [];
 
   void getUserdata() async {
-    DocumentSnapshot snap = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    String userUID = FirebaseAuth.instance.currentUser!.uid;
 
-    List watchersList = (snap.data() as Map<String, dynamic>)['watchers'];
-    List feedbackList = (snap.data() as Map<String, dynamic>)['feedback'];
-    List itemsList = (snap.data() as Map<String, dynamic>)['items'];
+    DocumentSnapshot userSnap =
+        await FirebaseFirestore.instance.collection('users').doc(userUID).get();
+
+    List watchersList = (userSnap.data() as Map<String, dynamic>)['watchers'];
+    List feedbackList = (userSnap.data() as Map<String, dynamic>)['feedback'];
+
+    itemsList = await getItemsForSale();
 
     setState(() {
-      username = (snap.data() as Map<String, dynamic>)['username'];
-      photoURL = (snap.data() as Map<String, dynamic>)['photoUrl'];
+      username = (userSnap.data() as Map<String, dynamic>)['username'];
+      photoURL = (userSnap.data() as Map<String, dynamic>)['photoUrl'];
       watchers = watchersList.length;
       itemsForSale = itemsList.length;
     });
@@ -117,31 +122,8 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           Flexible(
             fit: FlexFit.loose,
-            child: GridView.builder(
-              scrollDirection: Axis.vertical,
-              itemCount: itemsForSale == 0 ? 0 : itemsForSale,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 10,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  margin: const EdgeInsets.all(4.0),
-                  padding: const EdgeInsets.all(15.0),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.blueAccent)),
-                  child: GridTile(
-                    child: Center(
-                      child: Text(
-                        'Item $index',
-                        softWrap: true,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                );
-              },
+            child: ProductsPage(
+              products: itemsList,
             ),
           ),
         ],

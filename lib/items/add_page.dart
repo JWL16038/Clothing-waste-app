@@ -1,9 +1,15 @@
 import 'dart:typed_data';
 
+import 'package:clothing_waste_app/userprofile/profile_page.dart';
+import 'package:clothing_waste_app/utils/notifications.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'add_item.dart';
+import '../database/item_model.dart';
+import '../firebase/storage_methods.dart';
+import '../widgets/text_input_field.dart';
 import '../utils/images.dart';
 
 class AddPage extends StatefulWidget {
@@ -14,17 +20,67 @@ class AddPage extends StatefulWidget {
 }
 
 class _AddPageState extends State<AddPage> {
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _captionController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _colourController = TextEditingController();
+  final TextEditingController _conditionController = TextEditingController();
+  final TextEditingController _sizeController = TextEditingController();
   Uint8List? _file;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> addItem() async {
+    if (_file == null) {
+      showSnackBar("No image selected", context);
+      return;
+    }
+    String userUID = _auth.currentUser!.uid;
+    String itemPhotoUrl = await StorageMethods()
+        .uploadImage('items/$userUID/', _nameController.text, _file!);
+
+    Item item = Item(
+      // itemID: ,
+      caption: _captionController.text,
+      itemName: _nameController.text,
+      itemDesc: _descController.text,
+      price: int.parse(_priceController.text),
+      photoUrl: itemPhotoUrl,
+      colour: _colourController.text,
+      condition: _conditionController.text,
+      size: int.parse(_sizeController.text),
+    );
+
+    if (item.caption.isEmpty ||
+        item.itemName.isEmpty ||
+        item.itemDesc.isEmpty ||
+        _priceController.text.isEmpty ||
+        item.colour.isEmpty ||
+        item.condition.isEmpty ||
+        _sizeController.text.isEmpty) {
+      showSnackBar("Please fill in all the fields.", context);
+      return;
+    }
+
+    _firestore.collection('items').doc(userUID).collection('forsale').doc().set(
+          item.toJson(),
+        );
+    showSnackBar("Success.", context);
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
+      ),
+    );
+  }
 
   void _selectImage(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (context) {
         return SimpleDialog(
-          title: const Text('Add a post'),
+          title: const Text('List an item'),
           children: [
             SimpleDialogOption(
               padding: const EdgeInsets.all(20),
@@ -76,53 +132,84 @@ class _AddPageState extends State<AddPage> {
             onPressed: () => _selectImage(context),
           )
         : Scaffold(
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                AspectRatio(
-                  aspectRatio: 487 / 451,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: MemoryImage(_file!),
-                        fit: BoxFit.fill,
-                        alignment: FractionalOffset.center,
+            resizeToAvoidBottomInset: false,
+            body: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 32),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Flexible(
+                    flex: 2,
+                    child: Container(),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: AspectRatio(
+                      aspectRatio: 487 / 451,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: MemoryImage(_file!),
+                            fit: BoxFit.fill,
+                            alignment: FractionalOffset.center,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                TextField(
-                  controller: _titleController,
-                  decoration: const InputDecoration(
-                    hintText: "Title of item",
-                    border: InputBorder.none,
+                  TextInputField(
+                    textEditingController: _captionController,
+                    hintText: "Caption",
+                    textInputType: TextInputType.text,
+                    isPass: false,
                   ),
-                ),
-                TextField(
-                  controller: _priceController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    hintText: "Price of item",
-                    border: InputBorder.none,
+                  TextInputField(
+                    textEditingController: _nameController,
+                    hintText: "Item name",
+                    textInputType: TextInputType.text,
+                    isPass: false,
                   ),
-                ),
-                TextField(
-                  controller: _descController,
-                  decoration: const InputDecoration(
+                  TextInputField(
+                    textEditingController: _descController,
                     hintText: "Write a description",
-                    border: InputBorder.none,
+                    textInputType: TextInputType.text,
+                    isPass: false,
                   ),
-                ),
-                TextButton(
-                  child: const Text(
-                    'Post',
-                    style: TextStyle(fontSize: 20.0),
+                  TextInputField(
+                    textEditingController: _priceController,
+                    hintText: "Price of item",
+                    textInputType: TextInputType.number,
+                    isPass: false,
                   ),
-                  onPressed: () => addItemToDB(_titleController.text,
-                      _priceController.text, _descController.text, _file!),
-                )
-              ],
+                  TextInputField(
+                    textEditingController: _colourController,
+                    hintText: "Colour",
+                    textInputType: TextInputType.text,
+                    isPass: false,
+                  ),
+                  TextInputField(
+                    textEditingController: _conditionController,
+                    hintText: "Condition",
+                    textInputType: TextInputType.text,
+                    isPass: false,
+                  ),
+                  TextInputField(
+                    textEditingController: _sizeController,
+                    hintText: "Size",
+                    textInputType: TextInputType.number,
+                    isPass: false,
+                  ),
+                  TextButton(
+                    onPressed: addItem,
+                    child: const Text(
+                      'Post',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  )
+                ],
+              ),
             ),
           );
   }

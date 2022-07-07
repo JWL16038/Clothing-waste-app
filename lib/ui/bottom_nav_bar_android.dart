@@ -1,7 +1,10 @@
 import 'package:clothing_waste_app/design/colours.dart';
+import 'package:clothing_waste_app/ui/side_bar.dart';
 import 'package:clothing_waste_app/ui/tab_navigator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'app_bar.dart';
 
 int _selectedIndex = 0;
 String _currentPage = "home";
@@ -49,6 +52,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
       },
       child: Scaffold(
+        appBar: const AppBar_app(),
         body: Stack(
           children: <Widget>[
             _buildOffstageNavigator("home"),
@@ -103,6 +107,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
           },
           currentIndex: _selectedIndex,
         ),
+        drawer: const SideBar(),
       ),
     );
   }

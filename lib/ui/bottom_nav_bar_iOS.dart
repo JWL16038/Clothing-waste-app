@@ -57,6 +57,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         return true;
       },
       child: CupertinoTabScaffold(
+
         tabBuilder: (context, index) {
           switch (index) {
             case 1:

@@ -3,13 +3,8 @@ import 'dart:typed_data';
 import 'package:clothing_waste_app/authentication/login_page.dart';
 import 'package:clothing_waste_app/ui/responsive_layout.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../animations/slide.dart';
-import '../design/colours.dart';
-import '../ui/bottom_nav_bar_android.dart';
 import '../utils/images.dart';
 import '../utils/notifications.dart';
 import '../widgets/text_input_field.dart';

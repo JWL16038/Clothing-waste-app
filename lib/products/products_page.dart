@@ -14,9 +14,10 @@ class ProductsPage extends StatelessWidget {
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: numberColumns,
-          childAspectRatio: MediaQuery.of(context).size.width / MediaQuery.of(context).size.height,
+          childAspectRatio: MediaQuery.of(context).size.width /
+              MediaQuery.of(context).size.height,
         ),
-        itemCount: 12,//The size of the products list
+        itemCount: products.length,
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: null,
@@ -26,7 +27,8 @@ class ProductsPage extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(color: Colors.blueAccent)),
-              child: const ProductCard(),
+              //child: ProductCard(),
+              child: products[index],
             ),
           );
         },
