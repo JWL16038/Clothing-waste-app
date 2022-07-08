@@ -9,12 +9,16 @@ class ProductsListPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: products.length > 3 ? 3 : products.length,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (context, index) {
-        return products[index];
-      },
-    );
+    return products.isEmpty
+        ? const Center(
+            child: Text('Products list is empty'),
+          )
+        : ListView.builder(
+            itemCount: products.length > 3 ? 3 : products.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return products[index];
+            },
+          );
   }
 }

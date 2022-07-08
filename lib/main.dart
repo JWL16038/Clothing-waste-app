@@ -8,7 +8,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -36,14 +35,13 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.userChanges(),
           builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.active){
+            if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasError) {
                 return Text('Something went wrong: ${snapshot.error}');
               } else if (snapshot.hasData) {
                 return const ResponsiveLayout();
               }
-            }
-            else if(snapshot.connectionState == ConnectionState.waiting){
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );

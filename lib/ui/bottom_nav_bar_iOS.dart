@@ -9,17 +9,11 @@ import '../homepage/shop_page.dart';
 import '../items/add_page.dart';
 import '../userprofile/profile_page.dart';
 
+import 'global_keys.dart';
+
 int _selectedIndex = 0;
 String _currentPage = "home";
-List<String> pageKeys = ["home", "shop", "add", "search", "profile"];
 
-final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
-  "home": GlobalKey<NavigatorState>(),
-  "shop": GlobalKey<NavigatorState>(),
-  "add": GlobalKey<NavigatorState>(),
-  "search": GlobalKey<NavigatorState>(),
-  "profile": GlobalKey<NavigatorState>(),
-};
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -31,7 +25,7 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   void _selectTab(String tabItem, int index) {
     setState(
-          () {
+      () {
         _currentPage = pageKeys[index];
         _selectedIndex = index;
       },
@@ -42,22 +36,19 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return Offstage(
       offstage: _currentPage != tabItem,
       child: TabNavigator(
-        navigatorKey: _navigatorKeys[tabItem],
+        navigatorKey: navigatorKeys[tabItem],
         tabItem: tabItem,
       ),
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async{
-        //return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
-        return true;
+      onWillPop: () async {
+        return !await navigatorKeys[_currentPage]!.currentState!.maybePop();
       },
       child: CupertinoTabScaffold(
-
         tabBuilder: (context, index) {
           switch (index) {
             case 1:
@@ -81,7 +72,6 @@ class _BottomNavBarState extends State<BottomNavBar> {
                 builder: (context) => const HomePage(),
               );
           }
-
         },
         tabBar: CupertinoTabBar(
           inactiveColor: secondaryColor,

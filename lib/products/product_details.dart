@@ -2,10 +2,13 @@ import 'package:clothing_waste_app/buypage/place_order.dart';
 import 'package:flutter/material.dart';
 
 import '../animations/slide.dart';
+import '../database/item_model.dart';
 import '../homepage/buy_page.dart';
 
 class ProductDetails extends StatelessWidget {
-  const ProductDetails({Key? key}) : super(key: key);
+  final Item item;
+
+  const ProductDetails({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,39 +24,38 @@ class ProductDetails extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Center(
+                Center(
                   child: Text(
-                    "Item name here",
-                    style: TextStyle(fontSize: 28),
+                    'Item name: ${item.itemName}',
+                    style: const TextStyle(fontSize: 28),
                   ),
                 ),
                 const SizedBox(
                   height: 40,
                 ),
-                const Image(
-                  image: NetworkImage(
-                      'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+                Image(
+                  image: NetworkImage(item.photoUrl),
                   width: 150,
                   height: 150,
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Center(
-                  child: Text("Price: \$0.0"),
+                Center(
+                  child: Text("Price: \$${item.price}"),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                const Center(
-                  child: Text("Condition: Brand new"),
+                Center(
+                  child: Text("Condition: ${item.condition}"),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Center(
+                    Center(
                       child: Text(
-                        "Size: XXX",
+                        "Size: ${item.size}",
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -71,8 +73,8 @@ class ProductDetails extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Center(
-                      child: Text("Colour: "),
+                    Center(
+                      child: Text("Colour: ${item.colour}"),
                     ),
                     const SizedBox(
                       width: 10,
@@ -84,17 +86,18 @@ class ProductDetails extends StatelessWidget {
                       child: Container(
                         decoration: const BoxDecoration(
                           color: Colors.green,
+                          //temporary, colour will changed based on value given by the item object.
                           borderRadius: BorderRadius.all(Radius.circular(7.5)),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(12.0),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: Text(
-                      "Details: Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas porttitor congue massa. Fusce posuere, magna sed pulvinar ultricies, purus lectus malesuada libero, sit amet commodo magna eros quis urna. Nunc viverra imperdiet enim. Fusce est. Vivamus a tellus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Proin pharetra nonummy pede. Mauris et orci. Aenean nec lorem.",
+                      "Details: ${item.itemDesc}",
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -108,7 +111,6 @@ class ProductDetails extends StatelessWidget {
                       context,
                       SwipeLeftRoute(
                         page: const BuyPage(),
-
                       ),
                     );
                   },

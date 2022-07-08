@@ -18,7 +18,7 @@ class ProductCard extends StatelessWidget {
         onTap: () {
           Navigator.pushReplacement(
             context,
-            SwipeLeftRoute(page: const ProductDetails()),
+            SwipeLeftRoute(page: ProductDetails(item: item,)),
           );
         },
         child: Card(
@@ -29,7 +29,7 @@ class ProductCard extends StatelessWidget {
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('"${item.caption}"'),
+                  child: Text('Item name: ${item.itemName}'),
                 ),
               ),
               Image(
@@ -40,37 +40,13 @@ class ProductCard extends StatelessWidget {
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('Item name: ${item.itemName}'),
+                  child: Text('"${item.caption}"'),
                 ),
               ),
               Center(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('Description: ${item.itemDesc}'),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('Price: ${item.price}'),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('Colour: ${item.colour}'),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('Size: ${item.size}'),
-                ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(30, 2, 30, 2),
-                  child: Text('Condition: ${item.condition}'),
+                  child: Text('Price: \$${item.price}'),
                 ),
               ),
             ],

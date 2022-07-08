@@ -31,19 +31,26 @@ class _ProfilePageState extends State<ProfilePage> {
     List feedbackList = (userSnap.data() as Map<String, dynamic>)['feedback'];
 
     itemsList = await getItemsForSale();
-
-    setState(() {
-      username = (userSnap.data() as Map<String, dynamic>)['username'];
-      photoURL = (userSnap.data() as Map<String, dynamic>)['photoUrl'];
-      watchers = watchersList.length;
-      itemsForSale = itemsList.length;
-    });
+    if (mounted) {
+      setState(() {
+        username = (userSnap.data() as Map<String, dynamic>)['username'];
+        photoURL = (userSnap.data() as Map<String, dynamic>)['photoUrl'];
+        watchers = watchersList.length;
+        itemsForSale = itemsList.length;
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
     getUserdata();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    itemsList.clear();
   }
 
   @override

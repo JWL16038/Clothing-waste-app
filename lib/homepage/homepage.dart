@@ -1,8 +1,6 @@
 import 'package:clothing_waste_app/products/products_list_preview.dart';
-import 'package:clothing_waste_app/products/featured_page.dart';
-import 'package:clothing_waste_app/products/recently_added_list.dart';
-import 'package:clothing_waste_app/products/recently_added_page.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../animations/slide.dart';
 import '../items/user_items.dart';
@@ -22,15 +20,24 @@ class _HomePageState extends State<HomePage> {
   void getItems() async{
     forSaleList = await getItemsForSale();
 
-    setState(()  {
+    if(mounted){
+      setState(()  {
 
-    });
+      });
+    }
+
   }
 
   @override
   void initState(){
     super.initState();
     getItems();
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    forSaleList.clear();
   }
 
   @override

@@ -10,29 +10,33 @@ class ProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: numberColumns,
-          childAspectRatio: MediaQuery.of(context).size.width /
-              MediaQuery.of(context).size.height,
-        ),
-        itemCount: products.length,
-        itemBuilder: (BuildContext context, int index) {
-          return GestureDetector(
-            onTap: null,
-            child: Container(
-              margin: const EdgeInsets.all(7.5),
-              padding: const EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: Colors.blueAccent)),
-              //child: ProductCard(),
-              child: products[index],
+    return products.isEmpty
+        ? const Center(
+            child: Text('Products list is empty'),
+          )
+        : Scaffold(
+            body: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: numberColumns,
+                childAspectRatio: MediaQuery.of(context).size.width /
+                    MediaQuery.of(context).size.height,
+              ),
+              itemCount: products.length,
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: null,
+                  child: Container(
+                    margin: const EdgeInsets.all(7.5),
+                    padding: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.blueAccent)),
+                    //child: ProductCard(),
+                    child: products[index],
+                  ),
+                );
+              },
             ),
           );
-        },
-      ),
-    );
   }
 }

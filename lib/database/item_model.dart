@@ -10,6 +10,7 @@ class Item {
   final String colour;
   final String condition;
   final int size;
+  final String adddate;
 
   const Item({
     // required this.itemID,
@@ -21,10 +22,10 @@ class Item {
     required this.colour,
     required this.condition,
     required this.size,
+    required this.adddate,
   });
 
   Map<String, dynamic> toJson() => {
-        // "itemID": itemID,
         "caption": caption,
         "itemName": itemName,
         "itemDesc": itemDesc,
@@ -33,12 +34,12 @@ class Item {
         "colour": colour,
         "condition": condition,
         "size": size,
+        "adddate": adddate,
       };
 
   static Item fromSnap(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return Item(
-      // itemID: snapshot['itemID'],
       caption: snapshot['caption'],
       itemName: snapshot['itemName'],
       itemDesc: snapshot['itemDesc'],
@@ -47,6 +48,7 @@ class Item {
       condition: snapshot['condition'],
       size: snapshot['size'],
       photoUrl: snapshot['photoUrl'],
+      adddate: snapshot['adddate'],
     );
   }
 }

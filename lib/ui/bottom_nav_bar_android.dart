@@ -1,22 +1,13 @@
 import 'package:clothing_waste_app/design/colours.dart';
 import 'package:clothing_waste_app/ui/side_bar.dart';
 import 'package:clothing_waste_app/ui/tab_navigator.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'app_bar.dart';
+import 'global_keys.dart';
 
 int _selectedIndex = 0;
-String _currentPage = "home";
-List<String> pageKeys = ["home", "shop", "add", "search", "profile"];
-
-final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
-  "home": GlobalKey<NavigatorState>(),
-  "shop": GlobalKey<NavigatorState>(),
-  "add": GlobalKey<NavigatorState>(),
-  "search": GlobalKey<NavigatorState>(),
-  "profile": GlobalKey<NavigatorState>(),
-};
+String _currentPage = pageKeys[_selectedIndex];
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
@@ -26,20 +17,23 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
+
   void _selectTab(String tabItem, int index) {
-    setState(
-      () {
-        _currentPage = pageKeys[index];
-        _selectedIndex = index;
-      },
-    );
+    if (mounted) {
+      setState(
+        () {
+          _currentPage = pageKeys[index];
+          _selectedIndex = index;
+        },
+      );
+    }
   }
 
   Widget _buildOffstageNavigator(String tabItem) {
     return Offstage(
       offstage: _currentPage != tabItem,
       child: TabNavigator(
-        navigatorKey: _navigatorKeys[tabItem],
+        navigatorKey: navigatorKeys[tabItem],
         tabItem: tabItem,
       ),
     );
@@ -49,17 +43,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        return !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+        return !await navigatorKeys[_currentPage]!.currentState!.maybePop();
       },
       child: Scaffold(
         appBar: const AppBar_app(),
         body: Stack(
           children: <Widget>[
-            _buildOffstageNavigator("home"),
-            _buildOffstageNavigator("shop"),
-            _buildOffstageNavigator("add"),
-            _buildOffstageNavigator("search"),
-            _buildOffstageNavigator("profile"),
+            _buildOffstageNavigator(pageKeys[0]),
+            _buildOffstageNavigator(pageKeys[1]),
+            _buildOffstageNavigator(pageKeys[2]),
+            _buildOffstageNavigator(pageKeys[3]),
+            _buildOffstageNavigator(pageKeys[4]),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -70,36 +64,36 @@ class _BottomNavBarState extends State<BottomNavBar> {
               const IconThemeData(color: secondaryColor, size: 30),
           unselectedItemColor: secondaryColor,
           iconSize: 48.0,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 Icons.home,
               ),
-              label: 'Home',
+              label: pageKeys[0],
             ),
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 Icons.shop_2_outlined,
               ),
-              label: 'Shop items',
+              label: pageKeys[1],
             ),
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 Icons.add_circle_outline,
               ),
-              label: 'Add item',
+              label: pageKeys[2],
             ),
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 Icons.search_outlined,
               ),
-              label: 'Search',
+              label: pageKeys[3],
             ),
             BottomNavigationBarItem(
-              icon: Icon(
+              icon: const Icon(
                 Icons.account_circle_outlined,
               ),
-              label: 'Profile',
+              label: pageKeys[4],
             ),
           ],
           onTap: (int index) {

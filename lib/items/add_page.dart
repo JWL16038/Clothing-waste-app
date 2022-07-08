@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 
 import '../database/item_model.dart';
 import '../firebase/storage_methods.dart';
@@ -40,9 +41,25 @@ class _AddPageState extends State<AddPage> {
     String userUID = _auth.currentUser!.uid;
     String itemPhotoUrl = await StorageMethods()
         .uploadImage('items/$userUID/', _nameController.text, _file!);
+    final now = DateTime.now();
 
+    if (_captionController.text.isEmpty ||
+        _nameController.text.isEmpty ||
+        _descController.text.isEmpty ||
+        _priceController.text.isEmpty ||
+        _colourController.text.isEmpty ||
+        _conditionController.text.isEmpty ||
+        _sizeController.text.isEmpty) {
+      showSnackBar("Please fill in all the fields.", context);
+      return;
+    }
+
+    if(int.tryParse(_priceController.text) == null || int.tryParse(_sizeController.text) == null){
+      showSnackBar("Price or size must be a number.", context);
+      return;
+    }
+    
     Item item = Item(
-      // itemID: ,
       caption: _captionController.text,
       itemName: _nameController.text,
       itemDesc: _descController.text,
@@ -51,18 +68,8 @@ class _AddPageState extends State<AddPage> {
       colour: _colourController.text,
       condition: _conditionController.text,
       size: int.parse(_sizeController.text),
+      adddate: now.toString(),
     );
-
-    if (item.caption.isEmpty ||
-        item.itemName.isEmpty ||
-        item.itemDesc.isEmpty ||
-        _priceController.text.isEmpty ||
-        item.colour.isEmpty ||
-        item.condition.isEmpty ||
-        _sizeController.text.isEmpty) {
-      showSnackBar("Please fill in all the fields.", context);
-      return;
-    }
 
     _firestore.collection('items').doc(userUID).collection('forsale').doc().set(
           item.toJson(),
