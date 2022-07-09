@@ -12,6 +12,7 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(item.photoUrl);
     return Scaffold(
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),

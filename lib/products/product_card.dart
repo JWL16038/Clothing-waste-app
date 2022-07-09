@@ -11,14 +11,19 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(item.photoUrl);
     return SizedBox(
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width / 2,
       child: GestureDetector(
         onTap: () {
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
-            SwipeLeftRoute(page: ProductDetails(item: item,)),
+            SwipeLeftRoute(
+              page: ProductDetails(
+                item: item,
+              ),
+            ),
           );
         },
         child: Card(

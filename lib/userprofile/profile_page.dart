@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import '../items/user_items.dart';
 import '../products/products_page.dart';
 
+final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
 
@@ -22,15 +25,15 @@ class _ProfilePageState extends State<ProfilePage> {
   List<ProductCard> itemsList = [];
 
   void getUserdata() async {
-    String userUID = FirebaseAuth.instance.currentUser!.uid;
+    String userUID = _auth.currentUser!.uid;
 
     DocumentSnapshot userSnap =
         await FirebaseFirestore.instance.collection('users').doc(userUID).get();
 
     List watchersList = (userSnap.data() as Map<String, dynamic>)['watchers'];
-    List feedbackList = (userSnap.data() as Map<String, dynamic>)['feedback'];
+    // List feedbackList = (userSnap.data() as Map<String, dynamic>)['feedback'];
 
-    itemsList = await getItemsForSale();
+    itemsList = await getItemsForSale(userUID);
     if (mounted) {
       setState(() {
         username = (userSnap.data() as Map<String, dynamic>)['username'];

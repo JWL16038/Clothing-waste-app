@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../database/item_model.dart';
 import '../products/product_card.dart';
 
+final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
 Item convertDocToItem(DocumentSnapshot doc) {
   return Item(
     caption: doc['caption'],
@@ -18,16 +20,17 @@ Item convertDocToItem(DocumentSnapshot doc) {
   );
 }
 
-Future<List<ProductCard>> getItemsForSale() async {
-  String userUID = FirebaseAuth.instance.currentUser!.uid;
+Future<List<ProductCard>> getItemsForSale(String userUID) async {
+  List<ProductCard> itemsList = [];
 
-  QuerySnapshot result = await FirebaseFirestore.instance
+  QuerySnapshot result = await _firestore
       .collection('items')
       .doc(userUID)
       .collection('forsale')
       .get();
 
-  List<ProductCard> itemsList = [];
+  if (result.size == 0) return itemsList;
+
   for (DocumentSnapshot doc in result.docs) {
     itemsList.add(
       ProductCard(
@@ -38,22 +41,34 @@ Future<List<ProductCard>> getItemsForSale() async {
   return itemsList;
 }
 
-Future<List<ProductCard>> getRecentlyAdded() async {
-  String userUID = FirebaseAuth.instance.currentUser!.uid;
-
-  QuerySnapshot result = await FirebaseFirestore.instance
-      .collection('items')
-      .get();
-
+Future<List<ProductCard>> getRecentlyAdded(String userUID) async {
   List<ProductCard> itemsList = [];
+
+  QuerySnapshot result = await _firestore.collection('users').get();
+
+  if (result.size == 0) return itemsList;
+
   for (DocumentSnapshot doc in result.docs) {
-    if(doc.id == userUID) continue;
-    // doc.reference.collection('forsale').get()
-    itemsList.add(
-      ProductCard(
-        item: convertDocToItem(doc),
-      ),
-    );
+    if (doc.id == userUID) continue;
+
+    QuerySnapshot result2 = await _firestore
+        .collection('items')
+        .doc(doc.id)
+        .collection('forsale')
+        .get();
+
+    for (DocumentSnapshot itemDoc in result2.docs) {
+      itemsList.add(
+        ProductCard(
+          item: convertDocToItem(itemDoc),
+        ),
+      );
+    }
   }
+  itemsList.sort(
+    (itemA, itemB) => DateTime.parse(itemA.item.adddate).compareTo(
+      DateTime.parse(itemB.item.adddate),
+    ),
+  );
   return itemsList;
 }

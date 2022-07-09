@@ -1,7 +1,5 @@
-import 'package:clothing_waste_app/animations/slide.dart';
 import 'package:clothing_waste_app/authentication/authentication_methods.dart';
 import 'package:clothing_waste_app/authentication/signup_page.dart';
-import 'package:clothing_waste_app/ui/bottom_nav_bar_android.dart';
 import 'package:clothing_waste_app/ui/responsive_layout.dart';
 import 'package:clothing_waste_app/utils/notifications.dart';
 import 'package:flutter/material.dart';

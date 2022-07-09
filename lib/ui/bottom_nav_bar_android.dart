@@ -17,8 +17,7 @@ class BottomNavBar extends StatefulWidget {
 }
 
 class _BottomNavBarState extends State<BottomNavBar> {
-
-  void _selectTab(String tabItem, int index) {
+  void _selectTab(int index) {
     if (mounted) {
       setState(
         () {
@@ -97,7 +96,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
           ],
           onTap: (int index) {
-            _selectTab(pageKeys[index], index);
+            _selectTab(index);
           },
           currentIndex: _selectedIndex,
         ),

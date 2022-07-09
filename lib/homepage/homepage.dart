@@ -1,4 +1,5 @@
 import 'package:clothing_waste_app/products/products_list_preview.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -6,6 +7,8 @@ import '../animations/slide.dart';
 import '../items/user_items.dart';
 import '../products/product_card.dart';
 import '../products/products_page.dart';
+
+final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,10 +18,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List<ProductCard> recentlyList = [];
   List<ProductCard> forSaleList = [];
 
   void getItems() async{
-    forSaleList = await getItemsForSale();
+    final userUID = _auth.currentUser!.uid;
+
+    forSaleList = await getItemsForSale(userUID);
+    recentlyList = await getRecentlyAdded(userUID);
 
     if(mounted){
       setState(()  {
@@ -38,6 +45,7 @@ class _HomePageState extends State<HomePage> {
   void dispose(){
     super.dispose();
     forSaleList.clear();
+    recentlyList.clear();
   }
 
   @override
@@ -116,8 +124,8 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         SwipeLeftRoute(
-                          page: const ProductsPage(
-                            products: [],
+                          page: ProductsPage(
+                            products: recentlyList,
                           ),
                         ),
                       );
@@ -129,8 +137,8 @@ class _HomePageState extends State<HomePage> {
               Container(
                 height: 300,
                 margin: const EdgeInsets.symmetric(vertical: 5.0),
-                child: const ProductsListPreview(
-                  products: [],
+                child: ProductsListPreview(
+                  products: recentlyList,
                 ),
               ),
               const SizedBox(

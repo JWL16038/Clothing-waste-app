@@ -1,17 +1,17 @@
 import 'dart:typed_data';
 
-import 'package:clothing_waste_app/userprofile/profile_page.dart';
 import 'package:clothing_waste_app/utils/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 import '../database/item_model.dart';
 import '../firebase/storage_methods.dart';
 import '../widgets/text_input_field.dart';
 import '../utils/images.dart';
+
+import 'package:clothing_waste_app/ui/bottom_nav_bar_android.dart' as android_navbar;
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -74,12 +74,9 @@ class _AddPageState extends State<AddPage> {
     _firestore.collection('items').doc(userUID).collection('forsale').doc().set(
           item.toJson(),
         );
+
+
     showSnackBar("Success.", context);
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => const ProfilePage(),
-      ),
-    );
   }
 
   void _selectImage(BuildContext context) async {
