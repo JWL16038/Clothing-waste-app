@@ -11,7 +11,8 @@ import '../firebase/storage_methods.dart';
 import '../widgets/text_input_field.dart';
 import '../utils/images.dart';
 
-import 'package:clothing_waste_app/ui/bottom_nav_bar_android.dart' as android_navbar;
+import 'package:clothing_waste_app/ui/bottom_nav_bar_android.dart'
+    as android_navbar;
 
 class AddPage extends StatefulWidget {
   const AddPage({Key? key}) : super(key: key);
@@ -54,11 +55,12 @@ class _AddPageState extends State<AddPage> {
       return;
     }
 
-    if(int.tryParse(_priceController.text) == null || int.tryParse(_sizeController.text) == null){
+    if (int.tryParse(_priceController.text) == null ||
+        int.tryParse(_sizeController.text) == null) {
       showSnackBar("Price or size must be a number.", context);
       return;
     }
-    
+
     Item item = Item(
       caption: _captionController.text,
       itemName: _nameController.text,
@@ -74,7 +76,6 @@ class _AddPageState extends State<AddPage> {
     _firestore.collection('items').doc(userUID).collection('forsale').doc().set(
           item.toJson(),
         );
-
 
     showSnackBar("Success.", context);
   }
@@ -93,6 +94,7 @@ class _AddPageState extends State<AddPage> {
                 Navigator.of(context).pop();
                 Uint8List file = await pickImage(
                   ImageSource.camera,
+                  context,
                 );
                 setState(() {
                   _file = file;
@@ -106,6 +108,7 @@ class _AddPageState extends State<AddPage> {
                 Navigator.of(context).pop();
                 Uint8List file = await pickImage(
                   ImageSource.gallery,
+                  context,
                 );
                 setState(() {
                   _file = file;

@@ -53,6 +53,7 @@ class _SignupPageState extends State<SignupPage> {
                 Navigator.of(context).pop();
                 Uint8List file = await pickImage(
                   ImageSource.camera,
+                  context
                 );
                 setState(() {
                   _image = file;
@@ -66,6 +67,7 @@ class _SignupPageState extends State<SignupPage> {
                 Navigator.of(context).pop();
                 Uint8List file = await pickImage(
                   ImageSource.gallery,
+                  context,
                 );
                 setState(() {
                   _image = file;

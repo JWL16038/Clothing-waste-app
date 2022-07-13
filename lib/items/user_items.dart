@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../database/item_model.dart';
 import '../products/product_card.dart';
@@ -66,8 +65,8 @@ Future<List<ProductCard>> getRecentlyAdded(String userUID) async {
     }
   }
   itemsList.sort(
-    (itemA, itemB) => DateTime.parse(itemA.item.adddate).compareTo(
-      DateTime.parse(itemB.item.adddate),
+    (itemA, itemB) => DateTime.parse(itemB.item.adddate).compareTo(
+      DateTime.parse(itemA.item.adddate),
     ),
   );
   return itemsList;

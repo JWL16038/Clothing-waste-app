@@ -1,14 +1,12 @@
 import 'package:clothing_waste_app/products/product_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../items/user_items.dart';
 import '../products/products_page.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -30,16 +28,14 @@ class _ProfilePageState extends State<ProfilePage> {
     DocumentSnapshot userSnap =
         await FirebaseFirestore.instance.collection('users').doc(userUID).get();
 
-    List watchersList = (userSnap.data() as Map<String, dynamic>)['watchers'];
+    // List watchersList = (userSnap.data() as Map<String, dynamic>)['watchers'];
     // List feedbackList = (userSnap.data() as Map<String, dynamic>)['feedback'];
 
-    itemsList = await getItemsForSale(userUID);
     if (mounted) {
       setState(() {
         username = (userSnap.data() as Map<String, dynamic>)['username'];
         photoURL = (userSnap.data() as Map<String, dynamic>)['photoUrl'];
-        watchers = watchersList.length;
-        itemsForSale = itemsList.length;
+        // watchers = watchersList.length;
       });
     }
   }
@@ -86,8 +82,19 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      '$itemsForSale items for sale',
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('items')
+                          .doc(_auth.currentUser!.uid)
+                          .collection('forsale')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        return Text(
+                          '${snapshot.data?.size} items for sale',
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -119,21 +126,54 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(
             height: 60,
-            child: itemsForSale == 0
-                ? const Center(
-                    child: Text('No items found.'),
-                  )
-                : const Center(
-                    child: Text(
-                      'Your items for sale: ',
-                      textAlign: TextAlign.center,
-                    ),
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('items')
+                  .doc(_auth.currentUser!.uid)
+                  .collection('forsale')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                return Center(
+                  child: Text(
+                    snapshot.data?.size == 0
+                        ? 'No items found'
+                        : 'Your items for sale: ',
                   ),
+                );
+              },
+            ),
           ),
           Flexible(
             fit: FlexFit.loose,
-            child: ProductsPage(
-              products: itemsList,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection('items')
+                  .doc(_auth.currentUser!.uid)
+                  .collection('forsale')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                itemsList.clear();
+
+                for (DocumentSnapshot doc in snapshot.data!.docs) {
+                  itemsList.add(
+                    ProductCard(
+                      item: convertDocToItem(doc),
+                    ),
+                  );
+                }
+
+                return ProductsPage(
+                  //products: list,
+                  products: itemsList,
+                );
+              },
             ),
           ),
         ],
