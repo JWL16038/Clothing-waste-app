@@ -1,5 +1,7 @@
 import 'package:clothing_waste_app/buypage/place_order.dart';
 import 'package:clothing_waste_app/homepage/homepage.dart';
+import 'package:clothing_waste_app/items/user_items.dart';
+import 'package:clothing_waste_app/utils/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,6 @@ class _ProductDetailsState extends State<ProductDetails> {
   void initState() {
     super.initState();
     curUserUID = _auth.currentUser!.uid;
-    print(curUserUID);
   }
 
   @override
@@ -126,12 +127,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                 curUserUID != widget.userUID
                     ? OutlinedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            SwipeLeftRoute(
-                              page: const BuyPage(),
-                            ),
-                          );
+                          addItemToCart(curUserUID, widget.item);
+                          showSnackBar("Item added to your cart", context);
                         },
                         child: const Text('Add to cart'),
                       )

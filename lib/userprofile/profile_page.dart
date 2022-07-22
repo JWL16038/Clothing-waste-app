@@ -143,7 +143,11 @@ class _ProfilePageState extends State<ProfilePage> {
           Flexible(
             fit: FlexFit.loose,
             child: StreamBuilder(
-              stream: getItemsForSale(_auth.currentUser!.uid),
+              stream: FirebaseFirestore.instance
+                  .collection('items')
+                  .doc('forsale')
+                  .collection(_auth.currentUser!.uid)
+                  .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -154,8 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 itemsList.clear();
                 for (QueryDocumentSnapshot data in snapshot.data!.docs) {
                   itemsList.add(
-                      convertDocSnapToItems(data,data.reference.parent.id)
-                  );
+                      convertDocSnapToItems(data, data.reference.parent.id));
                 }
                 return ProductsPage(
                   //products: list,

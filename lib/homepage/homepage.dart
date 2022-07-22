@@ -134,9 +134,8 @@ class _HomePageState extends State<HomePage> {
                     }
                     recentlyList.clear();
                     for (QueryDocumentSnapshot data in snapshot.data!.docs) {
-                      recentlyList.add(
-                          convertDocSnapToItems(data,data.reference.parent.id)
-                      );
+                      recentlyList.add(convertDocSnapToItems(
+                          data, data.reference.parent.id));
                     }
                     return ProductsListPreview(
                       products: recentlyList,
@@ -225,7 +224,11 @@ class _HomePageState extends State<HomePage> {
                 height: 300,
                 margin: const EdgeInsets.symmetric(vertical: 5.0),
                 child: StreamBuilder(
-                  stream: getItemsForSale(_auth.currentUser!.uid),
+                  stream: FirebaseFirestore.instance
+                      .collection('items')
+                      .doc('forsale')
+                      .collection(_auth.currentUser!.uid)
+                      .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                           snapshot) {
@@ -236,9 +239,8 @@ class _HomePageState extends State<HomePage> {
                     }
                     forSaleList.clear();
                     for (QueryDocumentSnapshot data in snapshot.data!.docs) {
-                      forSaleList.add(
-                          convertDocSnapToItems(data,data.reference.parent.id)
-                      );
+                      forSaleList.add(convertDocSnapToItems(
+                          data, data.reference.parent.id));
                     }
                     return ProductsListPreview(
                       products: forSaleList,

@@ -97,7 +97,7 @@ Future<List<String>> _getOtherUserUIDs(String userUID) async {
 
 /// Gets all the recently added items
 /// Gets all items that were posted by all users except the current user, sort items by added date and then pick the 30 most recent items
-Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(userUID) async* {
+Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(String userUID) async* {
   List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
   List<String> uids = await _getOtherUserUIDs(userUID);
   for (var uid in uids) {
@@ -112,7 +112,7 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(userUID) async
   yield* Stream.fromIterable(snaps);
 }
 
-Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(userUID) async* {
+Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(String userUID) async* {
   List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
   List<String> uids = await _getOtherUserUIDs(userUID);
   for (var uid in uids) {
@@ -126,15 +126,9 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(userUID) async* {
   yield* Stream.fromIterable(snaps);
 }
 
-Stream<QuerySnapshot<Map<String, dynamic>>> getItemsForSale(String userUID) async* {
-  List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
-
-  snaps.add(await FirebaseFirestore.instance
-      .collection('items')
-      .doc('forsale')
-      .collection(userUID)
-      .get());
-
-  yield* Stream.fromIterable(snaps);
+bool addItemToCart(String userUID,Item item){
+  _firestore.collection('items').doc('cart').collection(userUID).doc().set(
+    item.toJson(),
+  );
+  return true;
 }
-
