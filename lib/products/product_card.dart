@@ -6,8 +6,9 @@ import '../database/item_model.dart';
 
 class ProductCard extends StatelessWidget {
   final Item item;
+  final String userUID;
 
-  const ProductCard({Key? key, required this.item}) : super(key: key);
+  const ProductCard({Key? key, required this.item,required String this.userUID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class ProductCard extends StatelessWidget {
             SwipeLeftRoute(
               page: ProductDetails(
                 item: item,
+                userUID: userUID,
               ),
             ),
           );

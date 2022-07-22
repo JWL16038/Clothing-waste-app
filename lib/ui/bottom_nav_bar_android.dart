@@ -84,7 +84,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
             BottomNavigationBarItem(
               icon: const Icon(
-                Icons.search_outlined,
+                Icons.shopping_cart,
               ),
               label: pageKeys[3],
             ),

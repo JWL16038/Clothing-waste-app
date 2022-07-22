@@ -1,21 +1,29 @@
+import 'dart:math';
+
+import 'package:clothing_waste_app/items/user_items.dart';
+import 'package:clothing_waste_app/products/products_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../items/user_items.dart';
+import '../database/item_model.dart';
 import '../products/product_card.dart';
-import '../products/products_page.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
-class ShopPage extends StatelessWidget {
-  const ShopPage({Key? key}) : super(key: key);
+class CartPage extends StatefulWidget {
+  const CartPage({Key? key}) : super(key: key);
+
+  @override
+  State<CartPage> createState() => _CartPageState();
+}
+
+class _CartPageState extends State<CartPage> {
+  List<ProductCard> cartList = [];
 
   @override
   Widget build(BuildContext context) {
-    List<ProductCard> productsList = [];
-
     return Scaffold(
       body: StreamBuilder(
           stream: getAllOtherItems(_auth.currentUser!.uid),
@@ -26,13 +34,13 @@ class ShopPage extends StatelessWidget {
                 child: CircularProgressIndicator(),
               );
             }
-            productsList.clear();
+            cartList.clear();
             for (QueryDocumentSnapshot data in snapshot.data!.docs) {
-              productsList.add(
+              cartList.add(
                   convertDocSnapToItems(data,data.reference.parent.id)
               );
             }
-            return ProductsPage(products: productsList);
+            return ProductsPage(products: cartList);
           }),
     );
   }

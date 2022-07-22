@@ -1,18 +1,38 @@
 import 'package:clothing_waste_app/buypage/place_order.dart';
+import 'package:clothing_waste_app/homepage/homepage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../animations/slide.dart';
 import '../database/item_model.dart';
 import '../homepage/buy_page.dart';
 
-class ProductDetails extends StatelessWidget {
+class ProductDetails extends StatefulWidget {
   final Item item;
+  final String userUID;
 
-  const ProductDetails({Key? key, required this.item}) : super(key: key);
+  const ProductDetails(
+      {Key? key, required this.item, required String this.userUID})
+      : super(key: key);
+
+  @override
+  State<ProductDetails> createState() => _ProductDetailsState();
+}
+
+class _ProductDetailsState extends State<ProductDetails> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  late final String curUserUID;
+
+  @override
+  void initState() {
+    super.initState();
+    curUserUID = _auth.currentUser!.uid;
+    print(curUserUID);
+  }
 
   @override
   Widget build(BuildContext context) {
-    // print("Image url ${item.photoUrl}");
     return Scaffold(
       body: ListView.builder(
         padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
@@ -27,7 +47,7 @@ class ProductDetails extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    'Item name: ${item.itemName}',
+                    'Item name: ${widget.item.itemName}',
                     style: const TextStyle(fontSize: 28),
                   ),
                 ),
@@ -35,7 +55,7 @@ class ProductDetails extends StatelessWidget {
                   height: 40,
                 ),
                 Image(
-                  image: NetworkImage(item.photoUrl),
+                  image: NetworkImage(widget.item.photoUrl),
                   width: 150,
                   height: 150,
                 ),
@@ -43,20 +63,20 @@ class ProductDetails extends StatelessWidget {
                   height: 10,
                 ),
                 Center(
-                  child: Text("Price: \$${item.price}"),
+                  child: Text("Price: \$${widget.item.price}"),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
                 Center(
-                  child: Text("Condition: ${item.condition}"),
+                  child: Text("Condition: ${widget.item.condition}"),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
                       child: Text(
-                        "Size: ${item.size}",
+                        "Size: ${widget.item.size}",
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -75,7 +95,7 @@ class ProductDetails extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Center(
-                      child: Text("Colour: ${item.colour}"),
+                      child: Text("Colour: ${widget.item.colour}"),
                     ),
                     const SizedBox(
                       width: 10,
@@ -98,29 +118,33 @@ class ProductDetails extends StatelessWidget {
                   padding: const EdgeInsets.all(12.0),
                   child: Center(
                     child: Text(
-                      "Details: ${item.itemDesc}",
+                      "Details: ${widget.item.itemDesc}",
                       textAlign: TextAlign.center,
                     ),
                   ),
                 ),
-                const Center(
-                    //child: Text("Location: 123 Lorem ipsum street,"),
-                    ),
-                OutlinedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      SwipeLeftRoute(
-                        page: const BuyPage(),
-                      ),
-                    );
-                  },
-                  child: const Text('Buy this item'),
+                curUserUID != widget.userUID
+                    ? OutlinedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            SwipeLeftRoute(
+                              page: const BuyPage(),
+                            ),
+                          );
+                        },
+                        child: const Text('Add to cart'),
+                      )
+                    : Container(),
+                // OutlinedButton(
+                //   onPressed: () {},
+                //   child: const Text('Swap with this item'),
+                // ),
+
+                const SizedBox(
+                  height: 40,
                 ),
-                OutlinedButton(
-                  onPressed: () {},
-                  child: const Text('Swap with this item'),
-                ),
+                //Seller info here
               ],
             ),
           );

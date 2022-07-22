@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-List<String> pageKeys = ["home", "shop", "add", "search", "profile"];
+List<String> pageKeys = ["home", "shop", "add", "cart", "profile"];
 
 final Map<String, GlobalKey<NavigatorState>> navigatorKeys = {
   pageKeys[0]: GlobalKey<NavigatorState>(),

@@ -28,14 +28,10 @@ class _ProfilePageState extends State<ProfilePage> {
     DocumentSnapshot userSnap =
         await FirebaseFirestore.instance.collection('users').doc(userUID).get();
 
-    // List watchersList = (userSnap.data() as Map<String, dynamic>)['watchers'];
-    // List feedbackList = (userSnap.data() as Map<String, dynamic>)['feedback'];
-
     if (mounted) {
       setState(() {
         username = (userSnap.data() as Map<String, dynamic>)['username'];
         photoURL = (userSnap.data() as Map<String, dynamic>)['photoUrl'];
-        // watchers = watchersList.length;
       });
     }
   }
@@ -85,8 +81,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('items')
-                          .doc(_auth.currentUser!.uid)
-                          .collection('forsale')
+                          .doc('forsale')
+                          .collection(_auth.currentUser!.uid)
                           .snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -129,8 +125,8 @@ class _ProfilePageState extends State<ProfilePage> {
             child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection('items')
-                  .doc(_auth.currentUser!.uid)
-                  .collection('forsale')
+                  .doc('forsale')
+                  .collection(_auth.currentUser!.uid)
                   .snapshots(),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -147,11 +143,7 @@ class _ProfilePageState extends State<ProfilePage> {
           Flexible(
             fit: FlexFit.loose,
             child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection('items')
-                  .doc(_auth.currentUser!.uid)
-                  .collection('forsale')
-                  .snapshots(),
+              stream: getItemsForSale(_auth.currentUser!.uid),
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -160,15 +152,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   );
                 }
                 itemsList.clear();
-
-                for (DocumentSnapshot doc in snapshot.data!.docs) {
+                for (QueryDocumentSnapshot data in snapshot.data!.docs) {
                   itemsList.add(
-                    ProductCard(
-                      item: convertDocToItem(doc),
-                    ),
+                      convertDocSnapToItems(data,data.reference.parent.id)
                   );
                 }
-
                 return ProductsPage(
                   //products: list,
                   products: itemsList,

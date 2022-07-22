@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../homepage/homepage.dart';
-import '../homepage/search_page.dart';
+import '../homepage/cart_page.dart';
 import '../homepage/shop_page.dart';
 import '../items/add_page.dart';
 import '../userprofile/profile_page.dart';
@@ -61,7 +61,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               );
             case 3:
               return CupertinoTabView(
-                builder: (context) => const SearchPage(),
+                builder: (context) => const CartPage(),
               );
             case 4:
               return CupertinoTabView(

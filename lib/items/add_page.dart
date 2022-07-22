@@ -72,8 +72,11 @@ class _AddPageState extends State<AddPage> {
       size: int.parse(_sizeController.text),
       adddate: now.toString(),
     );
-
-    _firestore.collection('items').doc(userUID).collection('forsale').doc().set(
+    //
+    // _firestore.collection('items').doc(userUID).collection('forsale').doc().set(
+    //       item.toJson(),
+    //     );
+    _firestore.collection('items').doc('forsale').collection(userUID).doc().set(
           item.toJson(),
         );
 
