@@ -1,22 +1,22 @@
-import 'package:clothing_waste_app/buypage/place_order.dart';
-import 'package:clothing_waste_app/homepage/homepage.dart';
 import 'package:clothing_waste_app/items/user_items.dart';
 import 'package:clothing_waste_app/utils/notifications.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../animations/slide.dart';
 import '../database/item_model.dart';
-import '../homepage/buy_page.dart';
 
 class ProductDetails extends StatefulWidget {
   final Item item;
   final String userUID;
+  final String itemID;
 
-  const ProductDetails(
-      {Key? key, required this.item, required String this.userUID})
-      : super(key: key);
+  const ProductDetails({
+    Key? key,
+    required this.item,
+    required this.userUID,
+    required this.itemID,
+  }) : super(key: key);
 
   @override
   State<ProductDetails> createState() => _ProductDetailsState();
@@ -24,6 +24,7 @@ class ProductDetails extends StatefulWidget {
 
 class _ProductDetailsState extends State<ProductDetails> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final String curUserUID;
 
   @override
@@ -124,24 +125,35 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                   ),
                 ),
-                curUserUID != widget.userUID
-                    ? OutlinedButton(
+                if (curUserUID != widget.userUID)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      OutlinedButton(
                         onPressed: () {
-                          addItemToCart(curUserUID, widget.item);
+                          // _firestore.collection('items')
+                          //     .doc('cart')
+                          //     .collection(_auth.currentUser!.uid)
+
+
+                          addItemToCart(
+                              curUserUID, widget.userUID, widget.itemID);
                           showSnackBar("Item added to your cart", context);
+                          // showSnackBar("Item already in your cart", context);
                         },
                         child: const Text('Add to cart'),
-                      )
-                    : Container(),
-                // OutlinedButton(
-                //   onPressed: () {},
-                //   child: const Text('Swap with this item'),
-                // ),
-
-                const SizedBox(
-                  height: 40,
-                ),
-                //Seller info here
+                      ),
+                      OutlinedButton(
+                        onPressed: () {},
+                        child: const Text('Swap with this item'),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      //Seller info here
+                    ],
+                  )
               ],
             ),
           );

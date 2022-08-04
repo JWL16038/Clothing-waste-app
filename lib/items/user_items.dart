@@ -22,66 +22,22 @@ Item _convertDocToItem(DocumentSnapshot doc) {
   );
 }
 
-List<ProductCard> _convertSnapshotToItems(
-    QuerySnapshot<Map<String, dynamic>> data, String userUID) {
-  List<ProductCard> itemsList = [];
-
-  if (data.size == 0) return itemsList;
-
-  for (DocumentSnapshot doc in data.docs) {
-    itemsList.add(
-      ProductCard(
-        item: _convertDocToItem(doc),
-        userUID: userUID,
-      ),
-    );
-  }
-  return itemsList;
-}
-
-ProductCard convertDocSnapToItems(
+ProductCard convertQueryDocSnapToItems(
     QueryDocumentSnapshot data, String userUID) {
-
-  if(data == null) throw Exception("No item provided");
-
   return ProductCard(
     item: _convertDocToItem(data),
     userUID: userUID,
+    itemID: data.id,
   );
 }
 
-// Future<List<ProductCard>> getRecentlyAdded(String userUID) async {
-//   List<ProductCard> itemsList = [];
-//
-//   QuerySnapshot result = await _firestore.collection('users').get();
-//
-//   if (result.size == 0) return itemsList;
-//
-//   for (DocumentSnapshot doc in result.docs) {
-//     if (doc.id == userUID) continue;
-//
-//     QuerySnapshot result2 = await _firestore
-//         .collection('items')
-//         .doc(doc.id)
-//         .collection('forsale')
-//         .get();
-//
-//     for (DocumentSnapshot itemDoc in result2.docs) {
-//       itemsList.add(
-//         ProductCard(
-//           item: _convertDocToItem(itemDoc),
-//           userUID: userUID,
-//         ),
-//       );
-//     }
-//   }
-//   itemsList.sort(
-//     (itemA, itemB) => DateTime.parse(itemB.item.adddate).compareTo(
-//       DateTime.parse(itemA.item.adddate),
-//     ),
-//   );
-//   return itemsList;
-// }
+ProductCard convertDocSnapToItems(DocumentSnapshot data, String userUID) {
+  return ProductCard(
+    item: _convertDocToItem(data),
+    userUID: userUID,
+    itemID: data.id,
+  );
+}
 
 Future<List<String>> _getOtherUserUIDs(String userUID) async {
   QuerySnapshot uidsSnap = await FirebaseFirestore.instance
@@ -97,7 +53,8 @@ Future<List<String>> _getOtherUserUIDs(String userUID) async {
 
 /// Gets all the recently added items
 /// Gets all items that were posted by all users except the current user, sort items by added date and then pick the 30 most recent items
-Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(String userUID) async* {
+Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(
+    String userUID) async* {
   List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
   List<String> uids = await _getOtherUserUIDs(userUID);
   for (var uid in uids) {
@@ -112,7 +69,8 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(String userUID
   yield* Stream.fromIterable(snaps);
 }
 
-Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(String userUID) async* {
+Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(
+    String userUID) async* {
   List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
   List<String> uids = await _getOtherUserUIDs(userUID);
   for (var uid in uids) {
@@ -126,9 +84,38 @@ Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(String userUID) asy
   yield* Stream.fromIterable(snaps);
 }
 
-bool addItemToCart(String userUID,Item item){
-  _firestore.collection('items').doc('cart').collection(userUID).doc().set(
-    item.toJson(),
-  );
+bool addItemToCart(String userUID, String sellerUID, String itemID) {
+  Map<String, dynamic> dataJson() => {
+        "itemID": itemID,
+        "seller": sellerUID,
+        "addCartDate": DateTime.now().toString(),
+      };
+
+  _firestore
+      .collection('items')
+      .doc('cart')
+      .collection(userUID)
+      .doc() //Change the document name to be auto-incremental
+      .set(dataJson());
   return true;
+}
+
+Future<List<ProductCard>> getCartItems(String userUID) async {
+  List<ProductCard> cards = [];
+  QuerySnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
+      .collection('items')
+      .doc('cart')
+      .collection(userUID)
+      .orderBy('addCartDate')
+      .get();
+  for (QueryDocumentSnapshot snap in query.docs) {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('items')
+        .doc('forsale')
+        .collection(snap['seller'])
+        .doc(snap['itemID'])
+        .get();
+    cards.add(convertDocSnapToItems(doc, snap['seller']));
+  }
+  return cards;
 }

@@ -7,8 +7,14 @@ import '../database/item_model.dart';
 class ProductCard extends StatelessWidget {
   final Item item;
   final String userUID;
+  final String itemID;
 
-  const ProductCard({Key? key, required this.item,required String this.userUID}) : super(key: key);
+  const ProductCard(
+      {Key? key,
+      required this.item,
+      required this.userUID,
+      required this.itemID})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +30,7 @@ class ProductCard extends StatelessWidget {
               page: ProductDetails(
                 item: item,
                 userUID: userUID,
+                itemID: itemID,
               ),
             ),
           );

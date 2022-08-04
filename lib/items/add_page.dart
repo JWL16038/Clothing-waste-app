@@ -106,20 +106,6 @@ class _AddPageState extends State<AddPage> {
             ),
             SimpleDialogOption(
               padding: const EdgeInsets.all(20),
-              child: const Text('Choose from gallery'),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                Uint8List file = await pickImage(
-                  ImageSource.gallery,
-                  context,
-                );
-                setState(() {
-                  _file = file;
-                });
-              },
-            ),
-            SimpleDialogOption(
-              padding: const EdgeInsets.all(20),
               child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
