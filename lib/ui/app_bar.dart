@@ -1,6 +1,8 @@
 import 'package:clothing_waste_app/messaging/messaging_main.dart';
-import 'package:clothing_waste_app/ui/side_bar.dart';
+import 'package:clothing_waste_app/ui/global_keys.dart';
 import 'package:flutter/material.dart';
+
+
 
 class AppBar_app extends StatelessWidget with PreferredSizeWidget{
   const AppBar_app({Key? key}) : super(key: key);
@@ -8,7 +10,7 @@ class AppBar_app extends StatelessWidget with PreferredSizeWidget{
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: const Text("Title bar"),
+      title: Text(pageKeys[0]),
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.message_outlined),

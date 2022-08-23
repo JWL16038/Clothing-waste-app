@@ -23,6 +23,7 @@ class ProductDetails extends StatefulWidget {
 }
 
 class _ProductDetailsState extends State<ProductDetails> {
+  bool showAddCartButton = true;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   late final String curUserUID;
@@ -87,7 +88,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     ),
                     Center(
                       child: OutlinedButton(
-                        onPressed: () {},
+                        onPressed: () {}, //implement this
                         child: const Text('Sizing chart'),
                       ),
                     ),
@@ -127,23 +128,16 @@ class _ProductDetailsState extends State<ProductDetails> {
                 ),
                 if (curUserUID != widget.userUID)
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      OutlinedButton(
-                        onPressed: () {
-                          // _firestore.collection('items')
-                          //     .doc('cart')
-                          //     .collection(_auth.currentUser!.uid)
-
-
-                          addItemToCart(
-                              curUserUID, widget.userUID, widget.itemID);
-                          showSnackBar("Item added to your cart", context);
-                          // showSnackBar("Item already in your cart", context);
-                        },
-                        child: const Text('Add to cart'),
-                      ),
+                      if (showAddCartButton)
+                        OutlinedButton(
+                          onPressed: () {
+                            checkInCart();
+                          },
+                          child: const Text('Add to cart'),
+                        ),
                       OutlinedButton(
                         onPressed: () {},
                         child: const Text('Swap with this item'),
@@ -153,12 +147,28 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                       //Seller info here
                     ],
-                  )
+                  ),
               ],
             ),
           );
         },
       ),
     );
+  }
+
+  void checkInCart() async {
+    QuerySnapshot snap = await _firestore
+        .collection('items')
+        .doc('cart')
+        .collection(_auth.currentUser!.uid)
+        .where("itemID", isEqualTo: widget.itemID)
+        .get();
+    if (snap.size == 0) {
+      addItemToCart(curUserUID, widget.userUID, widget.itemID);
+      showAddCartButton = true;
+      showSnackBar("Item added to your cart", context);
+    } else {
+      showSnackBar("Item already in your cart", context);
+    }
   }
 }

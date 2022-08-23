@@ -1,4 +1,5 @@
 import 'package:clothing_waste_app/products/product_card.dart';
+import 'package:clothing_waste_app/utils/notifications.dart';
 import 'package:flutter/material.dart';
 
 const int numberColumns = 2;
@@ -24,7 +25,7 @@ class ProductsPage extends StatelessWidget {
               itemCount: products.length,
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
-                  onTap: null,
+                  onTap: null,//showSnackBar("test",context),
                   child: Container(
                     margin: const EdgeInsets.all(7.5),
                     padding: const EdgeInsets.all(5.0),
