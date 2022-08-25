@@ -131,7 +131,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      if (showAddCartButton)
+                      if (!showAddCartButton)
                         OutlinedButton(
                           onPressed: () {
                             checkInCart();
