@@ -90,7 +90,6 @@ class AuthMethods {
     required String password,
   }) async {
     String msg = "";
-
     try {
       if (email.isNotEmpty || password.isNotEmpty) {
         await _auth.signInWithEmailAndPassword(
@@ -119,7 +118,10 @@ class AuthMethods {
           msg = error.toString();
       }
     }
-
     return msg;
+  }
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 }

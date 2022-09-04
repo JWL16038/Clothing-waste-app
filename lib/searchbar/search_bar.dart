@@ -8,7 +8,6 @@ class SearchBar extends StatefulWidget with PreferredSizeWidget{
   State<SearchBar> createState() => _SearchBarState();
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
@@ -40,7 +39,6 @@ class _SearchBarState extends State<SearchBar> {
                   ),
                 );
                 _searchText = field;
-                print(_searchController.text);
               } else {
                 _searchText = const Text("Search for...");
                 _searchIcon = const Icon(Icons.search);

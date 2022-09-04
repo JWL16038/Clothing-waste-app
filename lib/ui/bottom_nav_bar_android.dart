@@ -45,7 +45,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         return !await navigatorKeys[_currentPage]!.currentState!.maybePop();
       },
       child: Scaffold(
-        appBar: const AppBar_app(),
+        appBar: const AppBarApp(),
         body: Stack(
           children: <Widget>[
             _buildOffstageNavigator(pageKeys[0]),

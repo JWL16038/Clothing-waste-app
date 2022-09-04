@@ -1,11 +1,11 @@
 import 'dart:math';
 
 import 'package:clothing_waste_app/authentication/login_page.dart';
+import 'package:clothing_waste_app/authentication/authentication_methods.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../authentication/signout.dart';
 import '../database/item_model.dart';
 import '../utils/notifications.dart';
 
@@ -32,7 +32,7 @@ class SideBar extends StatelessWidget {
           ),
           MaterialButton(
             onPressed: () async {
-              await signOut();
+              await AuthMethods().logout();
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
                   builder: (context) => const LoginPage(),

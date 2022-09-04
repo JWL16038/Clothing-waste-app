@@ -18,29 +18,21 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
-
   @override
   Widget build(BuildContext context) {
-    List<ProductCard> productsList = [];
-
     return Scaffold(
-      appBar: SearchBar(),
-      body: StreamBuilder(
-          stream: getAllOtherItems(_auth.currentUser!.uid),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            productsList.clear();
-            for (QueryDocumentSnapshot data in snapshot.data!.docs) {
-              productsList
-                  .add(convertDocSnapToItems(data, data.reference.parent.id));
-            }
-            return ProductsPage(products: productsList);
-          }),
+      appBar: const SearchBar(),
+      body: FutureBuilder(
+        future: generateRandomItems(50),
+        builder: (BuildContext context, AsyncSnapshot<List<ProductCard>> list) {
+          if (list.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ProductsPage(products: list.requireData);
+        },
+      ),
     );
   }
 }

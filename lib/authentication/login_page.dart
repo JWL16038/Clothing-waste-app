@@ -2,6 +2,7 @@ import 'package:clothing_waste_app/authentication/authentication_methods.dart';
 import 'package:clothing_waste_app/authentication/signup_page.dart';
 import 'package:clothing_waste_app/ui/responsive_layout.dart';
 import 'package:clothing_waste_app/utils/notifications.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/text_input_field.dart';
@@ -34,7 +35,6 @@ class _LoginPageState extends State<LoginPage> {
       email: _emailController.text,
       password: _passwordController.text,
     );
-
     if (res == "Success") {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -97,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: const Text("Don't have an account?"),
                   ),
                   GestureDetector(
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (context) => const SignupPage(),
@@ -110,6 +110,23 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       child: const Text(
                         "Sign up",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                     AuthMethods().logout();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                      child: const Text(
+                        "Logout",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                         ),

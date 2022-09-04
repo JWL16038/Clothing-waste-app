@@ -36,222 +36,126 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-      reverse: false,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-          child: Column(
-            children: [
-              //const SearchBar(),
-              const SizedBox(height: 50),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Featured items",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black26,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+      body: ListView(
+        reverse: false,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
+            child: Column(
+              children: [
+                /*
+                Featured items
+                 */
+                const SizedBox(height: 50),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Featured items",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                      elevation: 5.0,
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        SwipeLeftRoute(
-                          page: const ProductsPage(
-                            products: [],
-                          ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black26,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        elevation: 5.0,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          SwipeLeftRoute(
+                            page: const ProductsPage(
+                              products: [],
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text("See more"),
+                    ),
+                  ],
+                ),
+                Container(
+                  height: 300,
+                  margin: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: const ProductsListPreview(
+                    products: [],
+                  ),
+                ),
+                const SizedBox(
+                  height: 60,
+                ),
+                /*
+               Recently added section
+               */
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Recently added",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black26,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 5.0,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          SwipeLeftRoute(
+                            page: ProductsPage(
+                              products: recentlyList,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text("See more"),
+                    ),
+                  ],
+                ),
+                Container(
+                  height: 300,
+                  margin: const EdgeInsets.symmetric(vertical: 5.0),
+                  child: StreamBuilder(
+                    stream: getRecentlyAddedItems(_auth.currentUser!.uid),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      recentlyList.clear();
+                      // for (QueryDocumentSnapshot data in snapshot.data!.docs) {
+                      //   recentlyList.add(convertDocSnapToItems(
+                      //       data, data.reference.parent.id));
+                      // }
+                      return ProductsListPreview(
+                        products: recentlyList,
                       );
                     },
-                    child: const Text("See more"),
                   ),
-                ],
-              ),
-              Container(
-                height: 300,
-                margin: const EdgeInsets.symmetric(vertical: 5.0),
-                child: const ProductsListPreview(
-                  products: [],
                 ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Recently added",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black26,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 5.0,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        SwipeLeftRoute(
-                          page: ProductsPage(
-                            products: recentlyList,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text("See more"),
-                  ),
-                ],
-              ),
-              Container(
-                height: 300,
-                margin: const EdgeInsets.symmetric(vertical: 5.0),
-                child: StreamBuilder(
-                  stream: getRecentlyAddedItems(_auth.currentUser!.uid),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    recentlyList.clear();
-                    for (QueryDocumentSnapshot data in snapshot.data!.docs) {
-                      recentlyList.add(convertDocSnapToItems(
-                          data, data.reference.parent.id));
-                    }
-                    return ProductsListPreview(
-                      products: recentlyList,
-                    );
-                  },
+                const SizedBox(
+                  height: 60,
                 ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Top sellers",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black26,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 5.0,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        SwipeLeftRoute(
-                          page: ProductsPage(
-                            products: [],
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text("See more"),
-                  ),
-                ],
-              ),
-              Container(
-                height: 300,
-                margin: const EdgeInsets.symmetric(vertical: 5.0),
-                child: ProductsListPreview(
-                  products: [],
-                ),
-              ),
-              const SizedBox(
-                height: 60,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Your items for sale",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.black26,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      elevation: 5.0,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        SwipeLeftRoute(
-                          page: ProductsPage(
-                            products: forSaleList,
-                          ),
-                        ),
-                      );
-                    },
-                    child: const Text("See more"),
-                  ),
-                ],
-              ),
-              Container(
-                height: 300,
-                margin: const EdgeInsets.symmetric(vertical: 5.0),
-                child: StreamBuilder(
-                  stream: FirebaseFirestore.instance
-                      .collection('items')
-                      .doc('forsale')
-                      .collection(_auth.currentUser!.uid)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                          snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    forSaleList.clear();
-                    for (QueryDocumentSnapshot data in snapshot.data!.docs) {
-                      forSaleList.add(convertDocSnapToItems(
-                          data, data.reference.parent.id));
-                    }
-                    return ProductsListPreview(
-                      products: forSaleList,
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        )
-      ],
-    ));
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

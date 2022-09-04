@@ -134,7 +134,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       if (!showAddCartButton)
                         OutlinedButton(
                           onPressed: () {
-                            checkInCart();
+                            //checkInCart();
                           },
                           child: const Text('Add to cart'),
                         ),
@@ -155,20 +155,20 @@ class _ProductDetailsState extends State<ProductDetails> {
       ),
     );
   }
-
-  void checkInCart() async {
-    QuerySnapshot snap = await _firestore
-        .collection('items')
-        .doc('cart')
-        .collection(_auth.currentUser!.uid)
-        .where("itemID", isEqualTo: widget.itemID)
-        .get();
-    if (snap.size == 0) {
-      addItemToCart(curUserUID, widget.userUID, widget.itemID);
-      showAddCartButton = true;
-      showSnackBar("Item added to your cart", context);
-    } else {
-      showSnackBar("Item already in your cart", context);
-    }
-  }
+  //
+  // void checkInCart() async {
+  //   QuerySnapshot snap = await _firestore
+  //       .collection('items')
+  //       .doc('cart')
+  //       .collection(_auth.currentUser!.uid)
+  //       .where("itemID", isEqualTo: widget.itemID)
+  //       .get();
+  //   if (snap.size == 0) {
+  //     addItemToCart(curUserUID, widget.userUID, widget.itemID);
+  //     showAddCartButton = true;
+  //     showSnackBar("Item added to your cart", context);
+  //   } else {
+  //     showSnackBar("Item already in your cart", context);
+  //   }
+  // }
 }

@@ -16,28 +16,27 @@ class ResponsiveLayout extends StatefulWidget {
 }
 
 class _ResponsiveLayoutState extends State<ResponsiveLayout> {
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     initializeUserData();
   }
 
-  void initializeUserData() async{
-    UserProvider userProvider = Provider.of<UserProvider>(context,listen: false);
+  void initializeUserData() async {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     await userProvider.refreshUser();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (context,constraints) {
-      if(Platform.isAndroid){
+    return LayoutBuilder(builder: (context, constraints) {
+      if (Platform.isAndroid) {
         return const android.BottomNavBar();
-      }
-      else if(Platform.isIOS){
+      } else if (Platform.isIOS) {
         return const ios.BottomNavBar();
       }
-      showSnackBar("Platform not recognized yet, default to android.",context);
+      showSnackBar("Platform not recognized yet, default to android.", context);
       return const android.BottomNavBar();
     });
   }

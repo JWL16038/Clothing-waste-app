@@ -11,9 +11,8 @@ import '../userprofile/profile_page.dart';
 
 import 'global_keys.dart';
 
-int _selectedIndex = 0;
 String _currentPage = "home";
-
+int _selectedIndex = 0;
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);

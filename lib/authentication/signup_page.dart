@@ -51,10 +51,7 @@ class _SignupPageState extends State<SignupPage> {
               child: const Text('Take a photo'),
               onPressed: () async {
                 Navigator.of(context).pop();
-                Uint8List file = await pickImage(
-                  ImageSource.camera,
-                  context
-                );
+                Uint8List file = await pickImage(ImageSource.camera, context);
                 setState(() {
                   _image = file;
                 });

@@ -24,17 +24,13 @@ class ProductsPage extends StatelessWidget {
               ),
               itemCount: products.length,
               itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: null,//showSnackBar("test",context),
-                  child: Container(
-                    margin: const EdgeInsets.all(7.5),
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border.all(color: Colors.blueAccent)),
-                    //child: ProductCard(),
-                    child: products[index],
-                  ),
+                return Container(
+                  margin: const EdgeInsets.all(7.5),
+                  padding: const EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: Colors.blueAccent)),
+                  child: products[index],
                 );
               },
             ),

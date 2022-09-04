@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,34 +58,30 @@ Future<List<String>> _getOtherUserUIDs(String userUID) async {
 Stream<QuerySnapshot<Map<String, dynamic>>> getRecentlyAddedItems(
     String userUID) async* {
   List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
-  List<String> uids = await _getOtherUserUIDs(userUID);
-  for (var uid in uids) {
-    snaps.add(await FirebaseFirestore.instance
-        .collection('items')
-        .doc('forsale')
-        .collection(uid)
-        .orderBy('adddate')
-        .limit(2)
-        .get());
-  }
+
   yield* Stream.fromIterable(snaps);
 }
 
-Stream<QuerySnapshot<Map<String, dynamic>>> getAllOtherItems(
+/// Gets all
+Future<List<QuerySnapshot<Map<String, dynamic>>>> getAllOtherItems(
+    String userUID) async {
+  List<QuerySnapshot<Map<String, dynamic>>> tempList = [];
+  List<String> uids = await _getOtherUserUIDs(userUID);
+
+  return tempList;
+}
+
+///Gets all items that were posted by this user
+Stream<QuerySnapshot<Map<String, dynamic>>> getCurUserItems(
     String userUID) async* {
-  List<QuerySnapshot<Map<String, dynamic>>> snaps = [];
-  List<String> uids = await _getOtherUserUIDs(userUID);
-  for (var uid in uids) {
-    snaps.add(await FirebaseFirestore.instance
-        .collection('items')
-        .doc('forsale')
-        .collection(uid)
-        .orderBy('adddate')
-        .get());
-  }
-  yield* Stream.fromIterable(snaps);
+  yield* FirebaseFirestore.instance
+      .collection('items')
+      .doc('forsale')
+      .collection(userUID)
+      .snapshots();
 }
 
+///Add an item posted by a specific user to the current user's cart
 bool addItemToCart(String userUID, String sellerUID, String itemID) {
   Map<String, dynamic> dataJson() => {
         "itemID": itemID,
@@ -100,6 +98,7 @@ bool addItemToCart(String userUID, String sellerUID, String itemID) {
   return true;
 }
 
+///Get all cart items for a specific user
 Future<List<ProductCard>> getCartItems(String userUID) async {
   List<ProductCard> cards = [];
   QuerySnapshot<Map<String, dynamic>> query = await FirebaseFirestore.instance
@@ -118,4 +117,33 @@ Future<List<ProductCard>> getCartItems(String userUID) async {
     cards.add(convertDocSnapToItems(doc, snap['seller']));
   }
   return cards;
+}
+
+Future<List<ProductCard>> generateRandomItems(int numItems) async {
+  final now = DateTime.now();
+  const _chars =
+      'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
+  Random _rnd = Random();
+  List<String> uids = await _getOtherUserUIDs(_auth.currentUser!.uid);
+  return List<ProductCard>.generate(
+    numItems,
+    (index) => ProductCard(
+      item: Item(
+        caption: "Lorem ipsum",
+        itemName: String.fromCharCodes(Iterable.generate(
+            10, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)))),
+        itemDesc: "Lorem ipsum",
+        price: 12,
+        photoUrl:
+            "https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg",
+        colour: "Red",
+        condition: "",
+        size: 12,
+        adddate: now.toString(),
+      ),
+      userUID: uids[_rnd.nextInt(uids.length)],
+      itemID: String.fromCharCodes(Iterable.generate(
+          20, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length)))),
+    ),
+  );
 }
